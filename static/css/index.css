@@ -179,11 +179,12 @@ body {
 
 .histogram-floating-images {
   position: absolute;
-  top: 60px;
-  right: 40px;
+  top: 11.5%;
+  right: 7.7%;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-width: 55%;
   z-index: 10;
   opacity: 0;
   transform: translateY(-10px);
@@ -221,11 +222,14 @@ body {
 .histogram-images-row {
   display: flex;
   gap: 10px;
+  width: 100%;
 }
 
 .histogram-floating-images img {
-  width: 300px;
-  height: 220px;
+  width: calc(50% - 5px);
+  max-width: 450px;
+  height: auto;
+  aspect-ratio: 300 / 220;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.9);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
