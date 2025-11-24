@@ -155,3 +155,84 @@ body {
 #interpolation-image-wrapper img {
   border-radius: 5px;
 }
+
+#histogram-chart {
+  min-height: 520px;
+}
+
+.histogram-visualization {
+  position: relative;
+}
+
+.histogram-chart-wrapper {
+  position: relative;
+}
+
+.histogram-floating-images {
+  position: absolute;
+  top: 60px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.histogram-floating-images.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.histogram-image-info {
+  color: #333;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.histogram-scene-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.histogram-errors {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  justify-content: center;
+}
+
+.histogram-images-row {
+  display: flex;
+  gap: 10px;
+}
+
+.histogram-floating-images img {
+  width: 300px;
+  height: 220px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  object-fit: cover;
+  background: #fff;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.histogram-floating-images img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.base-color {
+  color: #ff4444;
+}
+
+.ft-color {
+  color: #ff9800;
+}

@@ -19,6 +19,7 @@
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/favicon.svg">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -55,7 +56,7 @@
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/pdf/2011.12948"
+                <a href="./"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -64,7 +65,7 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2011.12948"
+                <a href="./"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -72,19 +73,9 @@
                   <span>arXiv</span>
                 </a>
               </span>
-              <!-- Video Link. -->
-              <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span>
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/google/nerfies"
+                <a href="./"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -94,7 +85,7 @@
               </span>
               <!-- Dataset Link. -->
               <span class="link-block">
-                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                <a href="./"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="far fa-images"></i>
@@ -111,6 +102,41 @@
   </div>
 </section>
 
+<section class="section" id="histogram">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <h2 class="title is-3 has-text-centered">Rotation Error Histogram</h2>
+        <p class="has-text-centered">
+          KDE curves summarizing pre-trained and fine-tuned VGGT rotation errors for non-overlapping UnScenePairs-t camera pairs.
+        </p>
+        <div class="box histogram-visualization">
+          <div class="histogram-chart-wrapper">
+            <canvas id="histogram-chart" aria-label="Histogram of VGGT rotation errors" role="img"></canvas>
+            <div class="histogram-floating-images" id="histogram-floating-images">
+              <div class="histogram-image-info" id="histogram-image-info">
+                <div class="histogram-scene-name" id="histogram-scene-name">–</div>
+                <div class="histogram-errors">
+                  <span class="base-color">Pre-trained: <span id="histogram-base-error">–</span>°</span>
+                  <span class="ft-color">Fine-tuned: <span id="histogram-ft-error">–</span>°</span>
+                </div>
+              </div>
+              <div class="histogram-images-row">
+                <img id="histogram-preview-img1" alt="Pair reference image 1" />
+                <img id="histogram-preview-img2" alt="Pair reference image 2" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="./static/histogram/vggt_unscenepairs_t.js"></script>
+<script src="./static/js/histogram.js"></script>
+<script src="./static/js/index.js"></script>
 </body>
+</html>
 </html>
 
