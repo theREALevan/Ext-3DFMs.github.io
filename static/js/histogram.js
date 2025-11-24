@@ -104,6 +104,28 @@ document.addEventListener('DOMContentLoaded', () => {
     pair: pair,
   }));
 
+  // Helper function to find closest point on a curve using binary search (more efficient than reduce)
+  const findClosestOnCurve = (curve, xValue) => {
+    if (curve.length === 0) return null;
+    if (curve.length === 1) return curve[0];
+    
+    let left = 0;
+    let right = curve.length - 1;
+    
+    while (right - left > 1) {
+      const mid = Math.floor((left + right) / 2);
+      if (curve[mid].x < xValue) {
+        left = mid;
+      } else {
+        right = mid;
+      }
+    }
+    
+    const distLeft = Math.abs(curve[left].x - xValue);
+    const distRight = Math.abs(curve[right].x - xValue);
+    return distLeft < distRight ? curve[left] : curve[right];
+  };
+
   // Track currently selected pair
   let currentPair = null;
 
@@ -165,7 +187,8 @@ document.addEventListener('DOMContentLoaded', () => {
           data: initialSelectedPair ? [{ x: initialSelectedPair.finetunedError, y: 0 }] : [],
           type: 'scatter',
           pointRadius: 8,
-          pointHoverRadius: 10,
+          pointHoverRadius: 8,
+          pointHoverBorderWidth: 3,
           pointBackgroundColor: 'transparent',
           pointBorderColor: '#ff9800',
           pointBorderWidth: 3,
@@ -175,12 +198,9 @@ document.addEventListener('DOMContentLoaded', () => {
         {
           label: 'Pre-trained Error',
           data: initialSelectedPair ? (() => {
-            // Find y-value on base curve for this error
             const xVal = initialSelectedPair.baseError;
-            const closest = baseCurve.reduce((prev, curr) => 
-              Math.abs(curr.x - xVal) < Math.abs(prev.x - xVal) ? curr : prev
-            );
-            return [{ x: xVal, y: closest.y }];
+            const closest = findClosestOnCurve(baseCurve, xVal);
+            return closest ? [{ x: xVal, y: closest.y }] : [];
           })() : [],
           type: 'scatter',
           pointRadius: 9,
@@ -193,12 +213,9 @@ document.addEventListener('DOMContentLoaded', () => {
         {
           label: 'Fine-tuned Error',
           data: initialSelectedPair ? (() => {
-            // Find y-value on ft curve for this error
             const xVal = initialSelectedPair.finetunedError;
-            const closest = ftCurve.reduce((prev, curr) => 
-              Math.abs(curr.x - xVal) < Math.abs(prev.x - xVal) ? curr : prev
-            );
-            return [{ x: xVal, y: closest.y }];
+            const closest = findClosestOnCurve(ftCurve, xVal);
+            return closest ? [{ x: xVal, y: closest.y }] : [];
           })() : [],
           type: 'scatter',
           pointRadius: 9,
@@ -254,54 +271,97 @@ document.addEventListener('DOMContentLoaded', () => {
           },
         },
       },
+      animation: {
+        duration: 300,
+        easing: 'easeOutQuart',
+        properties: ['x', 'y'], // Only animate position, not size or border width
+      },
+      transitions: {
+        active: {
+          animation: {
+            duration: 300,
+            easing: 'easeOutQuart',
+            properties: ['x', 'y'],
+          },
+        },
+      },
     },
   });
 
+  // Optimized hover handler with requestAnimationFrame throttling
+  let rafPending = false;
+  let pendingUpdate = null;
+  
+  const updateChart = () => {
+    if (!pendingUpdate) {
+      rafPending = false;
+      return;
+    }
+    
+    const { nearestPair } = pendingUpdate;
+    pendingUpdate = null;
+    rafPending = false;
+    
+    if (nearestPair && nearestPair !== currentPair) {
+      currentPair = nearestPair;
+      setPreviewPair(currentPair);
+      
+      // Calculate all marker positions
+      const baseX = currentPair.baseError;
+      const baseClosest = findClosestOnCurve(baseCurve, baseX);
+      const redMarkerData = baseClosest ? [{ x: baseClosest.x, y: baseClosest.y }] : [];
+      
+      const ftX = currentPair.finetunedError;
+      const ftClosest = findClosestOnCurve(ftCurve, ftX);
+      const orangeMarkerData = ftClosest ? [{ x: ftClosest.x, y: ftClosest.y }] : [];
+      
+      // Update red marker instantly (no animation)
+      chart.data.datasets[4].data = redMarkerData;
+      chart.update('none');
+      
+      // Update selected pair and orange marker data
+      chart.data.datasets[3].data = [{ x: currentPair.finetunedError, y: 0 }];
+      chart.data.datasets[5].data = orangeMarkerData;
+      
+      // Animate selected pair and orange marker
+      chart.update({
+        duration: 300,
+        easing: 'easeOutQuart',
+        lazy: false,
+      });
+      
+      // Force red marker to stay at target position (override any animation attempt)
+      // Use multiple requestAnimationFrame calls to ensure it stays put
+      requestAnimationFrame(() => {
+        chart.data.datasets[4].data = redMarkerData;
+        chart.update('none');
+        requestAnimationFrame(() => {
+          chart.data.datasets[4].data = redMarkerData;
+          chart.update('none');
+        });
+      });
+    }
+  };
+  
   // Handle hover to update preview - snap to nearest pair point
   chart.canvas.addEventListener('mousemove', (event) => {
     const canvasPosition = Chart.helpers.getRelativePosition(event, chart);
     const mouseX = canvasPosition.x;
     const mouseY = canvasPosition.y;
     
-    // Find the nearest pair point by pixel distance
-    let nearestPair = null;
-    let minDist = Infinity;
+    // Convert mouse X to data value for more efficient search
+    const dataX = chart.scales.x.getValueForPixel(mouseX);
     
-    pairPoints.forEach((point) => {
-      const pointX = chart.scales.x.getPixelForValue(point.x);
-      const pointY = chart.scales.y.getPixelForValue(point.y);
-      const dist = Math.sqrt((mouseX - pointX) ** 2 + (mouseY - pointY) ** 2);
-      
-      if (dist < minDist) {
-        minDist = dist;
-        nearestPair = point.pair;
-      }
-    });
+    // Use binary search to find nearest pair by error value (much faster than pixel distance)
+    const nearestPair = findClosestPair(dataX);
     
-    // Update if we found a pair and it's different from current
-    if (nearestPair && nearestPair !== currentPair) {
-      currentPair = nearestPair;
-      setPreviewPair(currentPair);
-      
-      // Update the selected pair dataset
-      chart.data.datasets[3].data = [{ x: currentPair.finetunedError, y: 0 }];
-      
-      // Update error markers on curves
-      // Pre-trained error marker
-      const baseX = currentPair.baseError;
-      const baseClosest = baseCurve.reduce((prev, curr) => 
-        Math.abs(curr.x - baseX) < Math.abs(prev.x - baseX) ? curr : prev
-      );
-      chart.data.datasets[4].data = [{ x: baseX, y: baseClosest.y }];
-      
-      // Fine-tuned error marker
-      const ftX = currentPair.finetunedError;
-      const ftClosest = ftCurve.reduce((prev, curr) => 
-        Math.abs(curr.x - ftX) < Math.abs(prev.x - ftX) ? curr : prev
-      );
-      chart.data.datasets[5].data = [{ x: ftX, y: ftClosest.y }];
-      
-      chart.update('none'); // Update without animation for smooth hover
+    // Store pending update
+    pendingUpdate = { nearestPair };
+    
+    // Throttle updates using requestAnimationFrame
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(updateChart);
     }
   });
 
