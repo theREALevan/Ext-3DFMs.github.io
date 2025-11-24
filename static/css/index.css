@@ -156,6 +156,15 @@ body {
   border-radius: 5px;
 }
 
+#histogram {
+  padding: 0 !important;
+}
+
+#histogram .container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 #histogram-chart {
   min-height: 520px;
 }
@@ -199,12 +208,13 @@ body {
   font-weight: 600;
   margin-bottom: 4px;
   color: #000;
+  font-size: 16px;
 }
 
 .histogram-errors {
   display: flex;
   gap: 12px;
-  font-size: 12px;
+  font-size: 14px;
   justify-content: center;
 }
 
