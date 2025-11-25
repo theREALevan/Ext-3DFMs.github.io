@@ -260,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
           enabled: false,
         },
         legend: {
+          position: 'bottom',
           labels: {
             usePointStyle: true,
             generateLabels: (chart) => {

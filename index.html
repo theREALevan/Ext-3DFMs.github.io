@@ -20,6 +20,54 @@
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/favicon.svg">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <style>
+    .interactive-panel .attention-image-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      max-width: 480px;
+    }
+    .interactive-panel .attention-image-wrapper img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+    .interactive-panel .attention-overlay {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: auto;
+    }
+    .attention-overlay .sample-patch {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 6px;
+      opacity: 0;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      background: linear-gradient(135deg, rgba(0, 123, 255, 0.28), rgba(0, 212, 255, 0.32));
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+    }
+    .attention-overlay .sample-patch.is-active {
+      opacity: 1;
+      border: 2px solid #00bcd4;
+      background: linear-gradient(135deg, rgba(0, 123, 255, 0.45), rgba(0, 212, 255, 0.55));
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+    }
+  </style>
 </head>
 <body>
 
@@ -106,10 +154,7 @@
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column">
-        <h2 class="title is-3 has-text-centered">Rotation Error Distribution</h2>
-        <p class="has-text-centered">
-          KDE curves showing the distribution of pre-trained and fine-tuned VGGT rotation errors on non-overlapping UnScenePairs-t camera pairs.
-        </p>
+        <!-- <h2 class="title is-3 has-text-centered">Rotation Error Distribution</h2> -->
         <div class="box histogram-visualization">
           <div class="histogram-chart-wrapper">
             <canvas id="histogram-chart" aria-label="Histogram of VGGT rotation errors" role="img"></canvas>
@@ -128,14 +173,182 @@
             </div>
           </div>
         </div>
+        <p class="has-text-centered">
+          <em>Given a pair of images with little or no visual overlaps, extreme relative rotation estimation predicts the relative rotation between them, where relative rotation error measures the angular distance between predicted and ground-truth relative rotation matrices. The interactive canvas above shows the distribution of pre-trained and fine-tuned VGGT relative rotation errors on non-overlapping UnScenePairs-t image pairs.</em>
+        </p>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            3D foundation models (3DFMs) have recently transformed 3D vision, enabling joint prediction of depths, poses, and point maps directly from images. Yet their ability to reason under extreme, non-overlapping views remains largely unexplored.
+          </p>
+          <p>
+            In this work, we study their internal representations and find that 3DFMs exhibit an emergent understanding of extreme-view geometry, despite never being trained for such conditions. To further enhance these capabilities, we introduce a lightweight alignment scheme that refines their internal 3D representation by tuning only a small subset of backbone bias terms, leaving all decoder heads frozen. This targeted adaptation substantially improves relative pose estimation under extreme viewpoints without degrading per-image depth or point quality.
+          </p>
+          <p>
+            Additionally, we contribute <strong>MegaUnScene</strong>, a new benchmark of Internet scenes unseen by existing 3DFMs, with dedicated test splits for both relative pose estimation and dense 3D reconstruction. All code and data will be released.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Method. -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Method</h2>
+        <div class="content has-text-justified">
+          <p>
+            We analyze how 3DFMs internally represent 3D structure through cross-view attention visualizations, revealing that the shared alternating attention backbone encodes a surprisingly rich understanding of scene geometry. The resulting maps show near-correspondence patterns and symmetry-based cues that persist even when the input images have little or no visual overlap, highlighting that the model's internal <em>3D language</em> extends well beyond direct pixel-level matches.
+          </p>
+          <div class="box interactive-panel" style="margin-bottom: 1rem; padding: 1rem 1.25rem;">
+            <h3 class="title is-5">Interactive Attention Visualization</h3>
+            <p>
+              Explore how a fine-tuned 3DFM attends to different 3×3 regions of image&nbsp;1 when reasoning about a non-overlapping image pair.
+              Click any highlighted patch on the left image to display its corresponding attention heatmap on image&nbsp;2.
+            </p>
+            <div class="columns attention-panel" style="margin-top: 0.75rem;">
+              <div class="column is-half has-text-centered">
+                <div class="attention-image-wrapper">
+                  <img id="attention-img1" src="./static/attention_vis/pair_1155/img1.png" alt="Attention source image">
+                  <div class="attention-overlay" id="attention-overlay"></div>
+                </div>
+              </div>
+              <div class="column is-half has-text-centered">
+                <figure style="margin: 0 auto; width: 100%; max-width: 480px;">
+                  <img id="attention-heatmap-preview" src="" alt="Attention heatmap preview" style="width: 100%; border: 1px solid #ddd; border-radius: 6px;">
+                </figure>
+              </div>
+            </div>
+          </div>
+          <p>
+            Building on this insight, we propose a lightweight alignment framework that fine-tunes 3DFMs for enhanced extreme-view reasoning while preserving their pretrained knowledge. We introduce a rotation-based alignment objective that supervises only on relative camera poses between image pairs using a geodesic loss, avoiding the need for dense point-wise annotations. To prevent disruption of geometric alignment between task-specific heads, we apply minimal fine-tuning by updating only the bias terms within the sparse set of identified backbone layers, leaving all decoder heads frozen. This targeted approach achieves effective alignment of the model's internal 3D language for extreme-view reasoning without degrading per-image depth or point quality, with a 99.99% reduction in trainable parameters compared to full fine-tuning.
+          </p>
+          <div class="has-text-centered" style="margin: 2rem 0;">
+            <img src="./static/images/method.png" alt="3DFM Architectural Design" style="max-width: 100%; height: auto;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/ Method. -->
   </div>
 </section>
 
 <script src="./static/histogram/vggt_unscenepairs_t.js"></script>
 <script src="./static/js/histogram.js"></script>
 <script src="./static/js/index.js"></script>
+<script type="module">
+  import samplePatchesData from './static/attention_vis/pair_1155/sample_patches.js';
+
+  const overlayEl = document.getElementById('attention-overlay');
+  const metaEl = document.getElementById('attention-sample-meta');
+  const previewEl = document.getElementById('attention-heatmap-preview');
+
+  const basePath = './static/attention_vis/pair_1155/';
+  const Hp = (samplePatchesData.patch_grid && samplePatchesData.patch_grid[0]) || 21;
+  const Wp = (samplePatchesData.patch_grid && samplePatchesData.patch_grid[1]) || 37;
+  let currentSampleId = null;
+
+  function renderSample(sampleId) {
+    if (String(sampleId) === String(currentSampleId)) return;
+    const sample = samplePatchesData.samples.find((s) => String(s.sample_id) === String(sampleId));
+    if (!sample) {
+      previewEl.src = '';
+      if (metaEl) metaEl.textContent = 'Sample not found.';
+      return;
+    }
+    previewEl.src = basePath + sample.heatmap;
+    if (metaEl) {
+      const [row, col] = sample.region_position;
+      const stats = sample.stats || {};
+      const mean = typeof stats.mean === 'number' ? stats.mean.toFixed(3) : '–';
+      metaEl.textContent = `Patch ${sample.sample_id}: row ${row}, column ${col} · mean attention ${mean}`;
+    }
+
+    currentSampleId = String(sample.sample_id);
+    overlayEl.querySelectorAll('.sample-patch').forEach((patch) => {
+      patch.classList.toggle('is-active', patch.dataset.sampleId === currentSampleId);
+    });
+  }
+
+  function createOverlayButtons() {
+    if (!overlayEl) return;
+    overlayEl.innerHTML = '';
+    samplePatchesData.samples.forEach((sample) => {
+      const patch = document.createElement('div');
+      patch.className = 'sample-patch';
+      patch.dataset.sampleId = sample.sample_id;
+      const patchSize = sample.patch_size || 3;
+      const topPct = (sample.region_position[0] / Hp) * 100;
+      const leftPct = (sample.region_position[1] / Wp) * 100;
+      const heightPct = (patchSize / Hp) * 100;
+      const widthPct = (patchSize / Wp) * 100;
+      patch.style.top = `${topPct}%`;
+      patch.style.left = `${leftPct}%`;
+      patch.style.width = `${widthPct}%`;
+      patch.style.height = `${heightPct}%`;
+      overlayEl.appendChild(patch);
+    });
+  }
+
+  function findNearestSample(rowPct, colPct) {
+    let closest = null;
+    let bestDist = Number.POSITIVE_INFINITY;
+    samplePatchesData.samples.forEach((sample) => {
+      const patchSize = sample.patch_size || 3;
+      const centerRowPct = ((sample.region_position[0] + patchSize / 2) / Hp) * 100;
+      const centerColPct = ((sample.region_position[1] + patchSize / 2) / Wp) * 100;
+      const dRow = centerRowPct - rowPct;
+      const dCol = centerColPct - colPct;
+      const dist = dRow * dRow + dCol * dCol;
+      if (dist < bestDist) {
+        bestDist = dist;
+        closest = sample;
+      }
+    });
+    return closest;
+  }
+
+  function setupHoverSelection() {
+    if (!overlayEl) return;
+    overlayEl.addEventListener('mousemove', (event) => {
+      const rect = overlayEl.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const colPct = ((event.clientX - rect.left) / rect.width) * 100;
+      const rowPct = ((event.clientY - rect.top) / rect.height) * 100;
+      const nearest = findNearestSample(rowPct, colPct);
+      if (nearest) {
+        renderSample(nearest.sample_id);
+      }
+    });
+  }
+
+  function initPanel() {
+    if (!overlayEl || !previewEl || !samplePatchesData) return;
+    createOverlayButtons();
+    setupHoverSelection();
+    if (samplePatchesData.samples.length) {
+      const firstId = String(samplePatchesData.samples[0].sample_id);
+      currentSampleId = null;
+      renderSample(firstId);
+    }
+  }
+
+  initPanel();
+</script>
 </body>
 </html>
 </html>
