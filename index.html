@@ -12,15 +12,16 @@
         rel="stylesheet">
 
   <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/favicon.svg">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script>
     window.MathJax = {
@@ -54,18 +55,103 @@
     }
     .attention-overlay .sample-patch {
       position: absolute;
-      pointer-events: none;
+      pointer-events: auto;
       border-radius: 6px;
       opacity: 0;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
       background: linear-gradient(135deg, rgba(0, 123, 255, 0.28), rgba(0, 212, 255, 0.32));
       border: 1.5px solid rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+    }
+    .attention-overlay .sample-patch.is-hover {
+      opacity: 0.6;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
     .attention-overlay .sample-patch.is-active {
       opacity: 1;
       border: 2px solid #00bcd4;
       background: linear-gradient(135deg, rgba(0, 123, 255, 0.45), rgba(0, 212, 255, 0.55));
       box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+    }
+    .attention-navigation {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 0 auto;
+      max-width: 1000px;
+    }
+    .attention-nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      color: #333;
+    }
+    .attention-nav-button:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-50%) scale(1.05);
+    }
+    .attention-nav-button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .attention-nav-button.prev {
+      left: -22px;
+    }
+    .attention-nav-button.next {
+      right: -22px;
+    }
+    @media (max-width: 768px) {
+      .attention-nav-button {
+        width: 40px;
+        height: 40px;
+      }
+      .attention-nav-button.prev {
+        left: -20px;
+      }
+      .attention-nav-button.next {
+        right: -20px;
+      }
+    }
+    .attention-pair-info {
+      text-align: center;
+      margin-top: 0.0rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .overlap-filter.is-active {
+      background-color: #363636;
+      color: #fff;
+    }
+    .section {
+      padding-bottom: 0rem;
+    }
+    .hero-body {
+      padding-bottom: 0rem;
+    }
+    .content a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: rgba(0, 0, 0, 0.3);
+    }
+    .content a:hover {
+      text-decoration-color: rgba(0, 0, 0, 0.6);
     }
   </style>
 </head>
@@ -225,30 +311,47 @@
             We analyze how 3DFMs internally represent 3D structure through cross-view attention visualizations, revealing that the shared alternating attention backbone encodes a surprisingly rich understanding of scene geometry. The resulting maps show near-correspondence patterns and symmetry-based cues that persist even when the input images have little or no visual overlap, highlighting that the model's internal <em>3D language</em> extends well beyond direct pixel-level matches.
           </p>
           <div class="box interactive-panel" style="margin-bottom: 1rem; padding: 1rem 1.25rem;">
-            <h3 class="title is-5">Interactive Attention Visualization</h3>
+            <h3 class="title is-5 has-text-centered">Interactive Attention Visualization</h3>
             <p>
-              Explore how a fine-tuned 3DFM attends to different 3×3 regions of image&nbsp;1 when reasoning about a non-overlapping image pair.
-              Click any highlighted patch on the left image to display its corresponding attention heatmap on image&nbsp;2.
+              The left image shows 28 highlighted 3&times;3 patch regions sampled from image&nbsp;1. Hover over any region to see a white preview box, then click to confirm and view the corresponding attention heatmap on the right, which visualizes where image&nbsp;2's tokens attend when processing that region. The heatmap is overlaid on image&nbsp;2, with warmer colors (red/yellow) indicating higher attention and cooler colors (blue) indicating lower attention. This reveals how the model establishes cross-view correspondences even when images have little or no visual overlap.
             </p>
-            <div class="columns attention-panel" style="margin-top: 0.75rem;">
-              <div class="column is-half has-text-centered">
-                <div class="attention-image-wrapper">
-                  <img id="attention-img1" src="./static/attention_vis/pair_1155/img1.png" alt="Attention source image">
-                  <div class="attention-overlay" id="attention-overlay"></div>
+            <div class="has-text-centered" style="margin: 1rem 0;">
+              <div class="buttons has-addons is-centered">
+                <button class="button is-small overlap-filter" data-overlap="none" id="filter-none">No overlap</button>
+                <button class="button is-small overlap-filter" data-overlap="small" id="filter-small">Small overlap</button>
+                <button class="button is-small overlap-filter" data-overlap="large" id="filter-large">Large overlap</button>
+              </div>
+            </div>
+            <div class="attention-navigation" style="margin-top: 0.75rem;">
+              <button class="attention-nav-button prev" id="attention-prev" aria-label="Previous pair">
+                <span class="icon"><i class="fas fa-chevron-left"></i></span>
+              </button>
+              <div class="columns attention-panel" style="flex: 1; margin: 0;">
+                <div class="column is-half has-text-centered">
+                  <div class="attention-image-wrapper">
+                    <img id="attention-img1" src="" alt="Attention source image">
+                    <div class="attention-overlay" id="attention-overlay"></div>
+                  </div>
+                </div>
+                <div class="column is-half has-text-centered">
+                  <figure style="margin: 0 auto; width: 100%; max-width: 480px;">
+                    <img id="attention-heatmap-preview" src="" alt="Attention heatmap preview" style="width: 100%; border: 1px solid #ddd; border-radius: 6px;">
+                  </figure>
                 </div>
               </div>
-              <div class="column is-half has-text-centered">
-                <figure style="margin: 0 auto; width: 100%; max-width: 480px;">
-                  <img id="attention-heatmap-preview" src="" alt="Attention heatmap preview" style="width: 100%; border: 1px solid #ddd; border-radius: 6px;">
-                </figure>
-              </div>
+              <button class="attention-nav-button next" id="attention-next" aria-label="Next pair">
+                <span class="icon"><i class="fas fa-chevron-right"></i></span>
+              </button>
+            </div>
+            <div class="attention-pair-info" id="attention-pair-info">
+              Pair 1 of 9 · Large overlap
             </div>
           </div>
           <p>
-            Building on this insight, we propose a lightweight alignment framework that fine-tunes 3DFMs for enhanced extreme-view reasoning while preserving their pretrained knowledge. We introduce a rotation-based alignment objective that supervises only on relative camera poses between image pairs using a geodesic loss, avoiding the need for dense point-wise annotations. To prevent disruption of geometric alignment between task-specific heads, we apply minimal fine-tuning by updating only the bias terms within the sparse set of identified backbone layers, leaving all decoder heads frozen. This targeted approach achieves effective alignment of the model's internal 3D language for extreme-view reasoning without degrading per-image depth or point quality, with a 99.99% reduction in trainable parameters compared to full fine-tuning.
+            Building on this insight, we propose a lightweight alignment framework that applies rotation-based supervision only on relative camera poses between image pairs using a geodesic loss, avoiding the need for dense annotations. To prevent disruption of the pre-trained multi-task capabilities, we apply minimal fine-tuning by updating only the bias terms within the sparse set of identified backbone layers, leaving all decoder heads frozen. Even though only around 80 thousand parameters are updated, this targeted approach achieves effective alignment of the model's internal 3D language for extreme-view reasoning without degrading per-image depth or point quality.
           </p>
-          <div class="has-text-centered" style="margin: 2rem 0;">
-            <img src="./static/images/method.png" alt="3DFM Architectural Design" style="max-width: 100%; height: auto;">
+          <div class="has-text-centered" style="margin: 0; padding: 0;">
+            <img src="./static/images/method.png" alt="3DFM Architectural Design" style="max-width: 100%; height: auto; margin: 0; padding: 0; display: block;">
           </div>
         </div>
       </div>
@@ -257,45 +360,155 @@
   </div>
 </section>
 
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Results. -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Results</h2>
+        <div class="content has-text-justified">
+            <p>
+              The image below shows two challenging image pairs from the UnScenePairs-t benchmark, where each pair is captured from viewpoints with large rotations and significant camera translation. For each example, the figure presents the input images, followed by a spherical visualization of the predicted relative rotations—<span style="color:black;">black</span> indicates the reference camera, <span style="color:#2563ca;">blue</span> indicates the ground-truth rotation, <span style="color:#ff5250;">red</span> indicates the pre-trained VGGT prediction, and <span style="color:#fbb52a;">yellow</span> indicates the fine-tuned VGGT prediction. On the right, the corresponding 3D reconstructions are shown, including the sparse ground-truth structure and the dense outputs from both the pre-trained and fine-tuned models. Across both cases, the pre-trained model produces distorted geometry due to incorrect relative rotation prediction, while the fine-tuned model yields accurate relative rotation prediction and coherent reconstruction. Please refer to the <a href="./static/supp_vis/viewer.html" style="color: #2563eb; text-decoration: none;">Interactive Visualization</a> for many additional visualizations.
+            </p>
+            
+        </div>
+      </div>
+    </div>
+    <!--/ Results. -->
+  </div>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths" style="margin: 2rem 0; padding: 0; position: relative;">
+        <div style="position: absolute; top: 0; left: 0; z-index: 10;">
+          <button class="button is-small is-light" id="grid-fullscreen-btn" aria-label="View fullscreen" style="border-radius: 0 0 6px 0;">
+            <span class="icon"><i class="fas fa-expand"></i></span>
+          </button>
+        </div>
+        <img id="grid-image" src="./static/images/grid.png" alt="Qualitative results over wELP-t" style="width: 100%; height: auto; margin: 0; padding: 0; display: block;">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Fullscreen modal -->
+  <div class="modal" id="grid-fullscreen-modal">
+    <div class="modal-background" id="grid-modal-background"></div>
+    <div class="modal-content" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative;">
+      <img id="grid-fullscreen-image" src="./static/images/grid.png" alt="Qualitative results over wELP-t" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+    </div>
+  </div>
+</section>
+
 <script src="./static/histogram/vggt_unscenepairs_t.js"></script>
 <script src="./static/js/histogram.js"></script>
 <script src="./static/js/index.js"></script>
 <script type="module">
-  import samplePatchesData from './static/attention_vis/pair_1155/sample_patches.js';
+  import pairsMetadata from './static/attention_vis/pairs_metadata.js';
 
   const overlayEl = document.getElementById('attention-overlay');
-  const metaEl = document.getElementById('attention-sample-meta');
   const previewEl = document.getElementById('attention-heatmap-preview');
+  const img1El = document.getElementById('attention-img1');
+  const prevButton = document.getElementById('attention-prev');
+  const nextButton = document.getElementById('attention-next');
+  const pairInfoEl = document.getElementById('attention-pair-info');
 
-  const basePath = './static/attention_vis/pair_1155/';
-  const Hp = (samplePatchesData.patch_grid && samplePatchesData.patch_grid[0]) || 21;
-  const Wp = (samplePatchesData.patch_grid && samplePatchesData.patch_grid[1]) || 37;
+  let currentPairIndex = 0;
   let currentSampleId = null;
+  let currentPairData = null;
+  let samplePatchesData = null;
+  let Hp = 21;
+  let Wp = 37;
+  let filteredMetadata = pairsMetadata;
+  let currentFilter = 'none';
+
+  const overlapLabels = {
+    'large': 'Large overlap',
+    'small': 'Small overlap',
+    'none': 'No overlap'
+  };
+
+  function filterPairs(overlap) {
+    currentFilter = overlap;
+    filteredMetadata = pairsMetadata.filter(pair => pair.overlap === overlap);
+    
+    // Update filter buttons
+    document.querySelectorAll('.overlap-filter').forEach(btn => {
+      btn.classList.toggle('is-active', btn.dataset.overlap === overlap);
+    });
+    
+    // Reset to first pair in filtered list
+    currentPairIndex = 0;
+    if (filteredMetadata.length > 0) {
+      loadPairData(0);
+    } else {
+      previewEl.src = '';
+      img1El.src = '';
+      if (overlayEl) overlayEl.innerHTML = '';
+      pairInfoEl.textContent = 'No pairs in this category';
+      updateNavigationButtons();
+    }
+  }
+
+  async function loadPairData(pairIndex) {
+    if (pairIndex < 0 || pairIndex >= filteredMetadata.length) return;
+    
+    const pairMeta = filteredMetadata[pairIndex];
+    const basePath = `./static/attention_vis/${pairMeta.path}/`;
+    
+    try {
+      const module = await import(`${basePath}sample_patches.js`);
+      samplePatchesData = module.default;
+      currentPairData = pairMeta;
+      
+      Hp = (samplePatchesData.patch_grid && samplePatchesData.patch_grid[0]) || 21;
+      Wp = (samplePatchesData.patch_grid && samplePatchesData.patch_grid[1]) || 37;
+      
+      img1El.src = `${basePath}img1.png`;
+      createOverlayButtons();
+      setupHoverSelection();
+      
+      if (samplePatchesData.samples.length) {
+        const firstId = String(samplePatchesData.samples[0].sample_id);
+        currentSampleId = null;
+        renderSample(firstId);
+      }
+      
+      updatePairInfo();
+      updateNavigationButtons();
+    } catch (error) {
+      console.error(`Failed to load pair ${pairMeta.pair_idx}:`, error);
+    }
+  }
+
+  function updatePairInfo() {
+    if (!currentPairData) return;
+    pairInfoEl.textContent = `Pair ${currentPairIndex + 1} of ${filteredMetadata.length}`;
+  }
+
+  function updateNavigationButtons() {
+    if (prevButton) prevButton.disabled = currentPairIndex === 0;
+    if (nextButton) nextButton.disabled = currentPairIndex >= filteredMetadata.length - 1;
+  }
 
   function renderSample(sampleId) {
-    if (String(sampleId) === String(currentSampleId)) return;
+    if (!samplePatchesData || String(sampleId) === String(currentSampleId)) return;
     const sample = samplePatchesData.samples.find((s) => String(s.sample_id) === String(sampleId));
     if (!sample) {
       previewEl.src = '';
-      if (metaEl) metaEl.textContent = 'Sample not found.';
       return;
     }
+    const basePath = `./static/attention_vis/${currentPairData.path}/`;
     previewEl.src = basePath + sample.heatmap;
-    if (metaEl) {
-      const [row, col] = sample.region_position;
-      const stats = sample.stats || {};
-      const mean = typeof stats.mean === 'number' ? stats.mean.toFixed(3) : '–';
-      metaEl.textContent = `Patch ${sample.sample_id}: row ${row}, column ${col} · mean attention ${mean}`;
-    }
 
     currentSampleId = String(sample.sample_id);
-    overlayEl.querySelectorAll('.sample-patch').forEach((patch) => {
-      patch.classList.toggle('is-active', patch.dataset.sampleId === currentSampleId);
-    });
+    if (overlayEl) {
+      overlayEl.querySelectorAll('.sample-patch').forEach((patch) => {
+        patch.classList.toggle('is-active', patch.dataset.sampleId === currentSampleId);
+      });
+    }
   }
 
   function createOverlayButtons() {
-    if (!overlayEl) return;
+    if (!overlayEl || !samplePatchesData) return;
     overlayEl.innerHTML = '';
     samplePatchesData.samples.forEach((sample) => {
       const patch = document.createElement('div');
@@ -315,6 +528,7 @@
   }
 
   function findNearestSample(rowPct, colPct) {
+    if (!samplePatchesData) return null;
     let closest = null;
     let bestDist = Number.POSITIVE_INFINITY;
     samplePatchesData.samples.forEach((sample) => {
@@ -334,7 +548,43 @@
 
   function setupHoverSelection() {
     if (!overlayEl) return;
+    let hoveredPatch = null;
+    
     overlayEl.addEventListener('mousemove', (event) => {
+      const rect = overlayEl.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const colPct = ((event.clientX - rect.left) / rect.width) * 100;
+      const rowPct = ((event.clientY - rect.top) / rect.height) * 100;
+      const nearest = findNearestSample(rowPct, colPct);
+      
+      // Remove hover from previous patch
+      if (hoveredPatch) {
+        hoveredPatch.classList.remove('is-hover');
+      }
+      
+      // Add hover to nearest patch
+      if (nearest) {
+        const patch = overlayEl.querySelector(`[data-sample-id="${nearest.sample_id}"]`);
+        if (patch && !patch.classList.contains('is-active')) {
+          patch.classList.add('is-hover');
+          hoveredPatch = patch;
+        } else {
+          hoveredPatch = null;
+        }
+      } else {
+        hoveredPatch = null;
+      }
+    });
+    
+    overlayEl.addEventListener('mouseleave', () => {
+      if (hoveredPatch) {
+        hoveredPatch.classList.remove('is-hover');
+        hoveredPatch = null;
+      }
+    });
+    
+    // Click to confirm and show heatmap
+    overlayEl.addEventListener('click', (event) => {
       const rect = overlayEl.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
       const colPct = ((event.clientX - rect.left) / rect.width) * 100;
@@ -346,20 +596,76 @@
     });
   }
 
-  function initPanel() {
-    if (!overlayEl || !previewEl || !samplePatchesData) return;
-    createOverlayButtons();
-    setupHoverSelection();
-    if (samplePatchesData.samples.length) {
-      const firstId = String(samplePatchesData.samples[0].sample_id);
-      currentSampleId = null;
-      renderSample(firstId);
+  function goToPair(direction) {
+    const newIndex = currentPairIndex + direction;
+    if (newIndex >= 0 && newIndex < filteredMetadata.length) {
+      currentPairIndex = newIndex;
+      loadPairData(currentPairIndex);
     }
   }
 
-  initPanel();
+  if (prevButton) {
+    prevButton.addEventListener('click', () => goToPair(-1));
+  }
+  if (nextButton) {
+    nextButton.addEventListener('click', () => goToPair(1));
+  }
+
+  // Setup filter buttons
+  document.querySelectorAll('.overlap-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterPairs(btn.dataset.overlap);
+    });
+  });
+
+  // Load first pair (start with "none" filter)
+  if (pairsMetadata && pairsMetadata.length > 0) {
+    document.getElementById('filter-none').classList.add('is-active');
+    filterPairs('none');
+  }
+
+  // Fullscreen grid image functionality
+  const gridFullscreenBtn = document.getElementById('grid-fullscreen-btn');
+  const gridModal = document.getElementById('grid-fullscreen-modal');
+  const gridModalBackground = document.getElementById('grid-modal-background');
+  const gridModalContent = gridModal ? gridModal.querySelector('.modal-content') : null;
+  const gridFullscreenImage = document.getElementById('grid-fullscreen-image');
+
+  function closeGridModal() {
+    if (gridModal) {
+      gridModal.classList.remove('is-active');
+    }
+  }
+
+  if (gridFullscreenBtn && gridModal) {
+    gridFullscreenBtn.addEventListener('click', () => {
+      gridModal.classList.add('is-active');
+    });
+
+    // Close when clicking on modal background
+    if (gridModalBackground) {
+      gridModalBackground.addEventListener('click', closeGridModal);
+    }
+
+    // Close when clicking on modal content area (but not the image)
+    if (gridModalContent) {
+      gridModalContent.addEventListener('click', (event) => {
+        // Only close if clicking on the content container, not the image
+        if (event.target === gridModalContent) {
+          closeGridModal();
+        }
+      });
+    }
+
+    // Prevent closing when clicking on the image itself
+    if (gridFullscreenImage) {
+      gridFullscreenImage.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+    }
+  }
 </script>
 </body>
 </html>
-</html>
+
 

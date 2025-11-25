@@ -75,7 +75,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--pairs_per_overlap",
         type=int,
-        default=3,
+        default=20,
         help="How many pairs to keep per overlap category.",
     )
     parser.add_argument(
@@ -83,6 +83,13 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=None,
         help="Optional cap on total processed pairs (debugging).",
+    )
+    parser.add_argument(
+        "--specific_pairs",
+        type=int,
+        nargs="+",
+        default=None,
+        help="Generate only these specific pair indices (overrides normal selection).",
     )
     return parser.parse_args()
 
@@ -138,6 +145,42 @@ def is_pair_four_three(pair_data: dict, tol: float = 0.05) -> bool:
     return is_four_three(pair_data["img1"], tol) and is_four_three(pair_data["img2"], tol)
 
 
+def get_scene_name(pair_data: dict) -> str:
+    """Extract scene name from pair data, similar to generate_histogram_data.py."""
+    img1_path_str = str(pair_data.get("img1", {}).get("path", ""))
+    scene_name = "Unknown"
+    
+    # Check for dense_dgpp pattern (from histogram script)
+    if "dense_dgpp" in img1_path_str:
+        parts = img1_path_str.split("/")
+        try:
+            dense_idx = parts.index("dense_dgpp")
+            if dense_idx + 1 < len(parts):
+                scene_name = parts[dense_idx + 1].replace("_", " ")
+        except ValueError:
+            pass
+    
+    # If still unknown, extract from path structure
+    if scene_name == "Unknown":
+        parts = img1_path_str.split("/")
+        # Scene name is typically after welp/selp/greatcourt in the path
+        for i, part in enumerate(parts):
+            part_lower = part.lower()
+            if "welp" in part_lower or "selp" in part_lower or "greatcourt" in part_lower:
+                if i + 1 < len(parts):
+                    scene_name = parts[i + 1].replace("_", " ")
+                    break
+        
+        # Fallback: use first meaningful part of path
+        if scene_name == "Unknown":
+            for part in parts:
+                if part and part not in ["", ".", ".."] and not part.endswith((".jpg", ".png", ".jpeg")):
+                    scene_name = part.replace("_", " ")
+                    break
+    
+    return scene_name
+
+
 def select_pairs(
     test_data: Dict[int, dict],
     base_errors: Dict[str, List[float]],
@@ -146,6 +189,7 @@ def select_pairs(
 ) -> Dict[str, List[Tuple[int, float]]]:
     """
     Map overlap category -> list of (pair_idx, base_error) sorted by error.
+    Ensures ALL pairs across all overlap categories are from different scenes.
     """
     overlap_to_pairs: Dict[str, List[int]] = defaultdict(list)
     for pair_idx, pair_data in test_data.items():
@@ -153,6 +197,9 @@ def select_pairs(
         overlap_to_pairs[overlap.lower()].append(pair_idx)
 
     selected: Dict[str, List[Tuple[int, float]]] = {}
+    # Global set to track used scenes across ALL overlap categories
+    global_used_scenes = set()
+    
     for overlap in ("large", "small", "none"):
         errors = base_errors.get(overlap, [])
         pair_indices = overlap_to_pairs.get(overlap, [])
@@ -172,7 +219,29 @@ def select_pairs(
             if is_pair_four_three(test_data[idx], aspect_tol)
         ]
         candidates.sort(key=lambda item: item[1])
-        selected[overlap] = candidates[:pairs_per_overlap]
+        
+        # Filter to ensure pairs are from different scenes (globally across all categories)
+        selected_pairs = []
+        for idx, err in candidates:
+            scene_name = get_scene_name(test_data[idx])
+            if scene_name not in global_used_scenes:
+                selected_pairs.append((idx, err))
+                global_used_scenes.add(scene_name)
+                if len(selected_pairs) >= pairs_per_overlap:
+                    break
+        
+        if len(selected_pairs) < pairs_per_overlap:
+            print(f"[WARN] Only found {len(selected_pairs)} pairs from different scenes for overlap '{overlap}' (requested {pairs_per_overlap})")
+        
+        selected[overlap] = selected_pairs
+    
+    total_pairs = sum(len(pairs) for pairs in selected.values())
+    total_scenes = len(global_used_scenes)
+    if total_pairs == total_scenes:
+        print(f"[INFO] Selected {total_pairs} pairs from {total_scenes} different scenes across all overlap categories.")
+    else:
+        print(f"[WARN] Selected {total_pairs} pairs but only {total_scenes} unique scenes (expected {total_pairs}).")
+    
     return selected
 
 
@@ -343,7 +412,10 @@ def generate_sample_patches(
         return [start + i * step for i in range(count)]
 
     row_indices = evenly_spaced_indices(max_regions_h - 1, 4, patch_size)
-    col_indices = evenly_spaced_indices(max_regions_w - 1, 7, patch_size)
+    # Horizontal indices: 2, 7, 12, 17, 22, 27, 32
+    col_indices = [2 + i * 5 for i in range(7)]
+    # Clamp to valid range
+    col_indices = [min(col, max_regions_w - patch_size) for col in col_indices]
 
     region_positions = [(row_idx, col_idx) for row_idx in row_indices for col_idx in col_indices]
 
@@ -448,30 +520,37 @@ def main() -> None:
     args = parse_args()
     test_data = load_test_data(args.test_data)
     base_errors = load_base_errors(args.base_results)
-    # Always start from a clean slate so stale attention data does not linger.
-    clear_directory(args.output_root)
+    
+    # Don't clear directory if generating specific pairs (to preserve existing data)
+    if args.specific_pairs is None:
+        clear_directory(args.output_root)
     ensure_output_dir(args.output_root)
 
-    selections = select_pairs(test_data, base_errors, args.pairs_per_overlap)
-    total_pairs = sum(len(lst) for lst in selections.values())
-    if args.max_pairs is not None:
-        total_pairs = min(total_pairs, args.max_pairs)
-    if total_pairs == 0:
-        print("No pairs selected. Nothing to do.")
-        return
-
     extractor = VGGTTokenExtractor(checkpoint_path=None)
-
     processed = 0
-    for overlap in ("large", "small", "none"):
-        pairs = selections.get(overlap, [])
-        if not pairs:
-            continue
-        print(f"===> Overlap '{overlap}': processing {len(pairs)} pair(s)")
-        for pair_idx, error in pairs:
-            if args.max_pairs is not None and processed >= args.max_pairs:
-                break
+    pairs_metadata = []
+
+    if args.specific_pairs:
+        # Generate only specified pairs
+        print(f"===> Generating {len(args.specific_pairs)} specific pair(s)")
+        for pair_idx in args.specific_pairs:
+            if pair_idx not in test_data:
+                print(f"[WARN] Pair {pair_idx} not found in test data, skipping.")
+                continue
+            
             pair_data = test_data[pair_idx]
+            overlap = pair_data.get("overlap_amount", "unknown").lower()
+            
+            # Find the error for this pair
+            error = 0.0
+            if overlap in base_errors:
+                overlap_pairs = [idx for idx, _ in select_pairs(test_data, base_errors, 1000).get(overlap, [])]
+                if pair_idx in overlap_pairs:
+                    idx_in_list = overlap_pairs.index(pair_idx)
+                    errors = base_errors[overlap]
+                    if idx_in_list < len(errors):
+                        error = float(errors[idx_in_list])
+            
             process_pair(
                 extractor,
                 pair_idx,
@@ -479,9 +558,104 @@ def main() -> None:
                 error,
                 args.output_root,
             )
+            pairs_metadata.append({
+                "pair_idx": pair_idx,
+                "overlap": overlap,
+                "base_error": error,
+                "path": f"pair_{pair_idx}"
+            })
             processed += 1
+    else:
+        # Normal selection process
+        selections = select_pairs(test_data, base_errors, args.pairs_per_overlap)
+        total_pairs = sum(len(lst) for lst in selections.values())
+        if args.max_pairs is not None:
+            total_pairs = min(total_pairs, args.max_pairs)
+        if total_pairs == 0:
+            print("No pairs selected. Nothing to do.")
+            return
+
+        for overlap in ("large", "small", "none"):
+            pairs = selections.get(overlap, [])
+            if not pairs:
+                continue
+            print(f"===> Overlap '{overlap}': processing {len(pairs)} pair(s)")
+            for pair_idx, error in pairs:
+                if args.max_pairs is not None and processed >= args.max_pairs:
+                    break
+                pair_data = test_data[pair_idx]
+                process_pair(
+                    extractor,
+                    pair_idx,
+                    pair_data,
+                    error,
+                    args.output_root,
+                )
+                pairs_metadata.append({
+                    "pair_idx": pair_idx,
+                    "overlap": overlap,
+                    "base_error": float(error),
+                    "path": f"pair_{pair_idx}"
+                })
+                processed += 1
 
     extractor.remove_hooks()
+    
+    # Update metadata file (append if specific pairs, replace if full generation)
+    metadata_path = args.output_root / "pairs_metadata.js"
+    
+    if args.specific_pairs and metadata_path.exists():
+        # Load existing metadata and merge
+        try:
+            existing_content = metadata_path.read_text()
+            # Extract existing pairs (simple parsing)
+            import re
+            existing_pairs = []
+            for match in re.finditer(r'"pair_idx":\s*(\d+)', existing_content):
+                existing_pairs.append(int(match.group(1)))
+            
+            # Remove duplicates and add new pairs
+            all_pair_indices = set(existing_pairs) | set(args.specific_pairs)
+            
+            # Rebuild metadata from all existing pairs + new ones
+            pairs_metadata = []
+            for pair_idx in sorted(all_pair_indices):
+                if pair_idx not in test_data:
+                    continue
+                pair_data = test_data[pair_idx]
+                overlap = pair_data.get("overlap_amount", "unknown").lower()
+                
+                # Find error
+                error = 0.0
+                if overlap in base_errors:
+                    overlap_pairs = [idx for idx, _ in select_pairs(test_data, base_errors, 1000).get(overlap, [])]
+                    if pair_idx in overlap_pairs:
+                        idx_in_list = overlap_pairs.index(pair_idx)
+                        errors = base_errors[overlap]
+                        if idx_in_list < len(errors):
+                            error = float(errors[idx_in_list])
+                
+                pairs_metadata.append({
+                    "pair_idx": pair_idx,
+                    "overlap": overlap,
+                    "base_error": error,
+                    "path": f"pair_{pair_idx}"
+                })
+        except Exception as e:
+            print(f"[WARN] Could not merge existing metadata: {e}, regenerating...")
+    
+    # Sort by overlap order (large, small, none) then by pair index
+    overlap_order = {"large": 0, "small": 1, "none": 2}
+    pairs_metadata.sort(key=lambda x: (overlap_order.get(x["overlap"], 99), x["pair_idx"]))
+    
+    js_content = (
+        "const pairsMetadata = "
+        + json.dumps(pairs_metadata, indent=2)
+        + ";\nexport default pairsMetadata;\n"
+    )
+    metadata_path.write_text(js_content)
+    print(f"Generated pairs metadata at {metadata_path}")
+    
     print(f"Done. Generated attention data for {processed} pair(s).")
 
 
