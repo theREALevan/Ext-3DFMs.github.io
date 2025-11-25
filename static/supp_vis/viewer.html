@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extreme Relative Rotation Estimation Visualization</title>
+  <style>
+    /* Button styles */
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 400;
+      text-align: center;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+    }
+    .btn-primary {
+      color: #fff;
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background-color: #0056b3;
+      border-color: #004085;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-outline {
+      color: #000;
+      background-color: transparent;
+      border: 1px solid #000;
+    }
+    .btn-outline:hover {
+      color: #fff;
+      background-color: #000;
+      border-color: #000;
+    }
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      border-width: 1.5px;
+    }
+    /* Alert styles */
+    .alert {
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+    .alert-warning {
+      color: #856404;
+      background-color: #fff3cd;
+      border-color: #ffeaa7;
+    }
+  </style>
+  
+  <style>
+    body { 
+      max-width: 1400px; 
+      margin: 30px auto; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+    }
+    .pair-container {
+      width: 100%;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      background: #fafafa;
+      box-sizing: border-box;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .pair-container img { 
+      width: 100%; 
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+    .pair-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #495057;
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #495057;
+    }
+    .stats {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+    }
+  </style>
+</head>
+<body>
+  <h1>Extreme Relative Rotation Estimation Visualization</h1>
+  
+  <div style="max-width: 1400px; margin: 0 auto 20px auto; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6; font-size: 0.95em; line-height: 1.6;">
+    <p style="margin: 0 0 10px 0;">Below we provide relative rotation predictions over the 3D foundation models considered in our work (VGGT, WorldMirror, and π³) over 200 randomly-sampled pairs from each of the three test sets (sELP, UnScenePairs and UnScenePairs-t).</p>
+    <p style="margin: 0 0 10px 0;">Each page shows one image pair and its relative rotation estimates using a spherical projection visualization, with the different colors denoting the reference (<span style="color: #000000; font-weight: bold;">black</span>), ground-truth (<span style="color: #0066cc; font-weight: bold;">blue</span>), prediction of the pre-trained model (<span style="color: #ff4b4b; font-weight: bold;">red</span>), and prediction of our fine-tuned model (<span style="color: #ffb41f; font-weight: bold;">orange</span>). The grey bar on top shows the model name, the overlap category and the geodesic error of both models (pre-trained and fine-tuned).</p>
+    
+    <p style="margin: 0 0 10px 0;">These random samples further show that our lightweight alignment procedure improves performance in extreme-view geometry settings while preserving strong performance in overlapping cases.</p>
+    <p style="margin: 0 0 10px 0;">To navigate to dense reconstruction visualizations, please click on the <strong>"To Recon Results"</strong> button below.</p>
+    
+    <p style="margin: 0; font-weight: bold;">Controls:</p>
+    <ul style="margin: 5px 0 0 20px; padding: 0;">
+        <li><strong>Filter:</strong> Select dataset, model, and overlap category using the buttons.</li>
+        <li><strong>Navigation:</strong> Use Previous/Next buttons or keyboard (<strong>A</strong>/<strong>←</strong> for previous, <strong>D</strong>/<strong>→</strong> for next).</li>
+        <li><strong>Switch View:</strong> Click <strong>"To Recon Results"</strong> to explore our UnSceneRecon subset.</li>
+    </ul>
+  </div>
+  
+  <div class="stats">
+    <div style="display: inline-block; margin-right: 20px;"><strong><strong>Dataset: </strong></strong><div id="datasetFilter" style="display: inline-block; margin-left: 10px;"></div></div>
+    <div style="display: inline-block; margin-right: 20px;"><strong><strong>Model: </strong></strong>
+    <div id="modelFilter" style="display: inline-block; margin-left: 10px;">
+      <label style="margin-right: 15px; font-weight: normal;"><input type="radio" name="modelFilter" value="vggt" onchange="switchModel()" style="margin-right: 5px;">VGGT</label>
+      <label style="margin-right: 15px; font-weight: normal;"><input type="radio" name="modelFilter" value="wm" onchange="switchModel()" style="margin-right: 5px;">WorldMirror</label>
+      <label style="font-weight: normal;"><input type="radio" name="modelFilter" value="pi3" onchange="switchModel()" style="margin-right: 5px;">π³</label>
+    </div></div><div style="display: inline-block; margin-right: 20px;"><strong><strong>Overlap: </strong></strong>
+    <div id="overlapFilter" style="display: inline-block; margin-left: 10px;">
+      <label style="margin-right: 15px; font-weight: normal;"><input type="radio" name="overlapFilter" value="none" checked onchange="applyFilter()" style="margin-right: 5px;">None</label>
+      <label style="margin-right: 15px; font-weight: normal;"><input type="radio" name="overlapFilter" value="small" onchange="applyFilter()" style="margin-right: 5px;">Small</label>
+      <label style="font-weight: normal;"><input type="radio" name="overlapFilter" value="large" onchange="applyFilter()" style="margin-right: 5px;">Large</label>
+    </div></div>
+    
+    <div style="display: inline-block; vertical-align: middle; border-left: 1px solid #dee2e6; padding-left: 15px; margin-left: 15px;">
+        <a href="./UnSceneRecon/ply_viewer.html" class="btn btn-primary" style="text-decoration: none; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">To Recon Results</a>
+    </div>
+  </div>
+
+  <div id="pairsContainer"></div>
+  
+  <div class="pagination-controls" style="text-align: center; margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+    <button id="prevBtn" class="btn btn-primary" onclick="previousPage()" style="min-width: 110px;">← Previous</button>
+    <span class="page-info" id="pageInfo" style="margin: 0 20px; font-weight: bold;">Page 1 of 1</span>
+    <button id="nextBtn" class="btn btn-primary" onclick="nextPage()" style="min-width: 110px;">Next →</button>
+  </div>
+
+<script>
+  window.embeddedDatasets = {};
+  window.registerData = function(dataset, key, data) {
+     if (!window.embeddedDatasets[dataset]) {
+        window.embeddedDatasets[dataset] = {};
+     }
+     if (key === 'selection') {
+        window.embeddedDatasets[dataset].selection = data;
+     } else {
+        window.embeddedDatasets[dataset][key] = { metadata: data };
+     }
+  };
+</script>
+<script src="UnScenePairs-t/selection_info.js"></script>
+<script src="UnScenePairs-t/vggt_error_metadata.js"></script>
+<script src="UnScenePairs-t/wm_error_metadata.js"></script>
+<script src="UnScenePairs-t/pi3_error_metadata.js"></script>
+<script src="UnScenePairs/selection_info.js"></script>
+<script src="UnScenePairs/vggt_error_metadata.js"></script>
+<script src="UnScenePairs/wm_error_metadata.js"></script>
+<script src="UnScenePairs/pi3_error_metadata.js"></script>
+<script src="sELP/selection_info.js"></script>
+<script src="sELP/vggt_error_metadata.js"></script>
+<script src="sELP/wm_error_metadata.js"></script>
+<script src="sELP/pi3_error_metadata.js"></script>
+  <script>
+    // Global state
+    let allPairs = [];
+    let pairsMetadata = {};
+    let filteredPairs = [];
+    let currentPage = 1;
+    const pairsPerPage = 1;
+    let currentModel = 'vggt';
+    let currentDataset = 'sELP';
+    let currentDatasetDir = 'sELP';
+    
+    // Populate dataset dropdown based on available datasets (only call once on initial load)
+    function populateDatasetDropdown() {
+      const datasetContainer = document.getElementById('datasetFilter');
+      if (!datasetContainer) return;
+      datasetContainer.innerHTML = ''; // Clear existing options
+      
+      // Define the desired order: sELP, UnScenePairs, UnScenePairs-t
+      const datasetOrder = ['sELP', 'UnScenePairs', 'UnScenePairs-t'];
+      
+      if (embeddedDatasets) {
+        const availableDatasets = Object.keys(embeddedDatasets);
+        // Sort datasets according to the desired order
+        const sortedDatasets = datasetOrder.filter(name => availableDatasets.includes(name))
+          .concat(availableDatasets.filter(name => !datasetOrder.includes(name)));
+        
+        sortedDatasets.forEach((datasetName, index) => {
+          const label = document.createElement('label');
+          label.style.marginRight = '15px';
+          label.style.fontWeight = 'normal';
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = 'datasetFilter';
+          radio.value = datasetName;
+          radio.onchange = switchDataset;
+          radio.style.marginRight = '5px';
+          if (index === 0 || datasetName === currentDataset) {
+            radio.checked = true;
+          }
+          label.appendChild(radio);
+          label.appendChild(document.createTextNode(datasetName));
+          datasetContainer.appendChild(label);
+        });
+        
+        // Set current dataset to first available if current is not available
+        if (sortedDatasets.length > 0) {
+          if (!sortedDatasets.includes(currentDataset)) {
+            currentDataset = sortedDatasets[0];
+            currentDatasetDir = currentDataset;
+          }
+          const radio = document.querySelector(`input[name="datasetFilter"][value="${currentDataset}"]`);
+          if (radio) radio.checked = true;
+        }
+      } else {
+        // Fallback: add default options in desired order
+        const datasets = ['sELP', 'UnScenePairs', 'UnScenePairs-t'];
+        datasets.forEach((datasetName, index) => {
+          const label = document.createElement('label');
+          label.style.marginRight = '15px';
+          label.style.fontWeight = 'normal';
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = 'datasetFilter';
+          radio.value = datasetName;
+          radio.onchange = switchDataset;
+          radio.style.marginRight = '5px';
+          if (index === 0 || datasetName === currentDataset) {
+            radio.checked = true;
+          }
+          label.appendChild(radio);
+          label.appendChild(document.createTextNode(datasetName));
+          datasetContainer.appendChild(label);
+        });
+        const radio = document.querySelector(`input[name="datasetFilter"][value="${currentDataset}"]`);
+        if (radio) radio.checked = true;
+      }
+    }
+    
+    // Switch between datasets
+    function switchDataset() {
+      const selectedRadio = document.querySelector('input[name="datasetFilter"]:checked');
+      if (!selectedRadio) return;
+      const newDataset = selectedRadio.value;
+      
+      console.log(`Switching from ${currentDataset} to ${newDataset}`);
+      
+      if (newDataset !== currentDataset) {
+        currentDataset = newDataset;
+        currentDatasetDir = newDataset;
+        currentPage = 1; // Reset to first page when switching datasets
+        loadPairs();
+      }
+    }
+    
+    function switchModel() {
+      const selectedRadio = document.querySelector('input[name="modelFilter"]:checked');
+      if (!selectedRadio) return;
+      const newModel = selectedRadio.value;
+      
+      if (newModel !== currentModel) {
+        // Save current pair index to stay on the same pair
+        let currentPairIdx = null;
+        if (filteredPairs.length > 0 && currentPage > 0) {
+          const startIndex = (currentPage - 1) * pairsPerPage;
+          if (startIndex < filteredPairs.length) {
+            currentPairIdx = filteredPairs[startIndex];
+          }
+        }
+        
+        currentModel = newModel;
+        loadPairs();
+        
+        // Restore to the same pair if it exists in the new filtered list
+        if (currentPairIdx !== null && filteredPairs.includes(currentPairIdx)) {
+          const newIndex = filteredPairs.indexOf(currentPairIdx);
+          currentPage = Math.floor(newIndex / pairsPerPage) + 1;
+          renderCurrentPage();
+          updatePaginationControls();
+        } else if (filteredPairs.length > 0) {
+          // If pair not found, stay on first page
+          currentPage = 1;
+          renderCurrentPage();
+          updatePaginationControls();
+        }
+      }
+    }
+    
+    // Load pairs and metadata for current dataset
+    function loadPairs() {
+      console.log(`Loading pairs for dataset: ${currentDataset}`);
+      
+      if (embeddedDatasets && embeddedDatasets[currentDataset]) {
+        const datasetData = embeddedDatasets[currentDataset];
+        allPairs = datasetData.selection?.selected_pairs || [];
+        pairsMetadata = (datasetData[currentModel] && datasetData[currentModel].metadata) || datasetData.metadata || {};
+        console.log(`Loaded ${allPairs.length} pairs for ${currentDataset} with model ${currentModel}`);
+      } else {
+        console.error(`No embedded data found for dataset ${currentDataset}. Available datasets:`, embeddedDatasets ? Object.keys(embeddedDatasets) : 'none');
+        allPairs = [];
+        pairsMetadata = {};
+      }      applyFilter();
+    }
+    
+    function applyFilter() {
+      const selectedRadio = document.querySelector('input[name="overlapFilter"]:checked');
+      const overlapFilter = selectedRadio ? selectedRadio.value : 'none';
+      
+      filteredPairs = allPairs.filter(pairIdx => {
+        const metadata = pairsMetadata[pairIdx] || pairsMetadata[String(pairIdx)];
+        return metadata && metadata.overlap === overlapFilter;
+      });
+      
+      currentPage = 1;
+      renderCurrentPage();
+      updatePaginationControls();
+    }
+    
+    function updatePaginationControls() {
+      const totalPages = Math.ceil(filteredPairs.length / pairsPerPage);
+      const pageInfo = document.getElementById('pageInfo');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      
+      if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+      if (prevBtn) prevBtn.disabled = currentPage === 1;
+      if (nextBtn) nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+      
+      // Hide pagination if no results
+      const paginationControls = document.querySelector('.pagination-controls');
+      if (totalPages <= 1) {
+        if (paginationControls) paginationControls.style.display = 'none';
+      } else {
+        if (paginationControls) paginationControls.style.display = 'block';
+      }
+    }
+    
+    function getModelDisplayName(model) {
+      const modelNames = {
+        'vggt': 'VGGT',
+        'wm': 'WorldMirror',
+        'pi3': 'π³'
+      };
+      return modelNames[model] || model.toUpperCase();
+    }
+
+    function renderCurrentPage() {
+      // Store scroll position before rendering
+      const scrollY = window.scrollY || window.pageYOffset;
+      
+      const container = document.getElementById('pairsContainer');
+      container.innerHTML = '';
+      
+      if (filteredPairs.length === 0) {
+        container.innerHTML = '<div class="alert alert-warning">No pairs found matching the filter.</div>';
+        updatePaginationControls();
+        return;
+      }
+      
+      const startIndex = (currentPage - 1) * pairsPerPage;
+      const pairIdx = filteredPairs[startIndex];
+      
+      if (!pairIdx) {
+        container.innerHTML = '<div class="alert alert-warning">No pair found for this page.</div>';
+        updatePaginationControls();
+        return;
+      }
+      
+      // Get metadata for this pair
+      const metadata = pairsMetadata[pairIdx] || pairsMetadata[String(pairIdx)] || {};
+      
+      // Use relative path for images (works when HTML is opened directly)
+      const pairDir = `${currentDatasetDir}/single_pair_${pairIdx}`;
+      const imagesPath = `${pairDir}/images.jpg`;
+      const ellipsoidPath = `${pairDir}/${currentModel}_ellipsoid.jpg`;
+      
+      const pairDiv = document.createElement('div');
+      pairDiv.className = 'pair-container';
+      
+      // Header with metadata
+      const header = document.createElement('div');
+      header.className = 'pair-header';
+      
+      let headerParts = [];
+      headerParts.push(`Model: ${getModelDisplayName(currentModel)}`);
+      if (metadata.overlap) {
+        headerParts.push(`Overlap: ${metadata.overlap.toUpperCase()}`);
+      }
+      if (metadata.base_error !== undefined) {
+        headerParts.push(`Pre-trained Error: ${metadata.base_error.toFixed(2)}°`);
+      }
+      if (metadata.ft_error !== undefined) {
+        headerParts.push(`Fine-tuned Error: ${metadata.ft_error.toFixed(2)}°`);
+      }
+      const headerText = headerParts.join(' | ');
+      header.textContent = headerText;
+      pairDiv.appendChild(header);
+      
+      // Images container - side by side
+      const imagesContainer = document.createElement('div');
+      imagesContainer.style.display = 'flex';
+      imagesContainer.style.gap = '20px';
+      imagesContainer.style.marginBottom = '20px';
+      
+      // Left: Side-by-side images
+      const imagesDiv = document.createElement('div');
+      imagesDiv.style.flex = '1';
+      const imagesImg = document.createElement('img');
+      imagesImg.src = imagesPath;
+      imagesImg.alt = `Images for pair ${pairIdx}`;
+      imagesImg.style.width = '100%';
+      imagesImg.style.borderRadius = '8px';
+      imagesImg.style.border = '1px solid #ccc';
+      imagesImg.onerror = function() {
+        this.style.display = 'none';
+      };
+      imagesDiv.appendChild(imagesImg);
+      imagesContainer.appendChild(imagesDiv);
+      
+      // Right: Ellipsoid
+      const ellipsoidDiv = document.createElement('div');
+      ellipsoidDiv.style.flex = '1';
+      const ellipsoidImg = document.createElement('img');
+      ellipsoidImg.src = ellipsoidPath;
+      ellipsoidImg.alt = `Ellipsoid for pair ${pairIdx}`;
+      ellipsoidImg.style.width = '100%';
+      ellipsoidImg.style.borderRadius = '8px';
+      ellipsoidImg.style.border = '1px solid #ccc';
+      ellipsoidImg.onerror = function() {
+        this.style.display = 'none';
+      };
+      ellipsoidDiv.appendChild(ellipsoidImg);
+      imagesContainer.appendChild(ellipsoidDiv);
+      
+      pairDiv.appendChild(imagesContainer);
+      
+      container.appendChild(pairDiv);
+      
+      updatePaginationControls();
+      
+      // Restore scroll position after rendering completes
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo(0, scrollY);
+        });
+      });
+    }
+    
+    function nextPage() {
+      const totalPages = Math.ceil(filteredPairs.length / pairsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderCurrentPage();
+      }
+    }
+    
+    function previousPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderCurrentPage();
+      }
+    }
+    
+    // Event listeners
+    // Radio buttons use onchange attribute, no need for addEventListener
+    if (document.querySelector('input[name="modelFilter"]')) {
+        const modelRadio = document.querySelector(`input[name="modelFilter"][value="${currentModel}"]`);
+        if (modelRadio) modelRadio.checked = true;
+      }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(event) {
+      // Don't trigger if user is typing in an input field
+      if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.tagName === 'SELECT') {
+        return;
+      }
+      
+      // A key or Left Arrow: previous page
+      if (event.key === 'a' || event.key === 'A' || event.key === 'ArrowLeft') {
+        event.preventDefault();
+        previousPage();
+      }
+      // D key or Right Arrow: next page
+      else if (event.key === 'd' || event.key === 'D' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        nextPage();
+      }
+    });
+    
+    // Load and render when page loads
+    function initializeViewer() {
+      // Populate dropdown first
+      populateDatasetDropdown();
+      // Then load pairs
+      loadPairs();
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeViewer);
+    } else {
+      initializeViewer();
+    }
+  </script>
+</body>
+</html>
+

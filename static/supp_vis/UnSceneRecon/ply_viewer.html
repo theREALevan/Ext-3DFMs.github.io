@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dense Reconstruction Visualization</title>
+  <style>
+    /* Button styles */
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 400;
+      text-align: center;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+    }
+    .btn-primary {
+      color: #fff;
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background-color: #0056b3;
+      border-color: #004085;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-outline {
+      color: #000;
+      background-color: transparent;
+      border: 1px solid #000;
+    }
+    .btn-outline:hover {
+      color: #fff;
+      background-color: #000;
+      border-color: #000;
+    }
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      border-width: 1.5px;
+    }
+    /* Alert styles */
+    .alert {
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+    .alert-warning {
+      color: #856404;
+      background-color: #fff3cd;
+      border-color: #ffeaa7;
+    }
+  </style>
+  
+  <style>
+    body { 
+      max-width: 1400px; 
+      margin: 30px auto; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      background-color: #ffffff;
+      color: #000;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #495057;
+    }
+    .stats {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+    }
+    .pair-container {
+      width: 100%;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      background: #fafafa;
+      box-sizing: border-box;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      /* overflow: hidden; Removed to let children handle their own overflow/borders */
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .pair-header {
+      text-align: center;
+      margin-bottom: 20px; /* Add margin bottom */
+      padding: 15px;
+      background: #495057;
+      color: white;
+      border-radius: 8px; /* Rounded corners */
+      font-weight: bold;
+      font-size: 1.2em;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    /* ... */
+    #viewer-content {
+        display: flex;
+        height: 600px;
+        width: 100%;
+        position: relative;
+        border: 1px solid #ccc; /* Add border to viewer area */
+        border-radius: 8px; /* Rounded corners for viewer area */
+        overflow: hidden; /* Clip content to rounded corners */
+    }
+    .view {
+        flex: 1;
+        position: relative;
+        border-right: 1px solid #ccc;
+        overflow: hidden;
+        background: #fff;
+    }
+    .view:last-child {
+        border-right: none;
+    }
+    .label {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        color: rgba(0, 0, 0, 0.9);
+        background: rgba(255, 255, 255, 0.8);
+        padding: 6px 10px;
+        border-radius: 4px;
+        pointer-events: none;
+        font-size: 14px;
+        font-weight: 500;
+        user-select: none;
+        border: 1px solid #ccc;
+        z-index: 10;
+    }
+    .loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 14px;
+        color: #333;
+        pointer-events: none;
+        z-index: 10;
+    }
+    
+    /* Dropdown styling to match viewer.html controls */
+    select {
+        padding: 8px 12px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        background-color: #fff;
+    }
+
+    /* Floating button styles */
+    .floating-btn {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        z-index: 100;
+        padding: 10px 15px;
+        background-color: rgba(0, 123, 255, 0.9);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    .floating-btn:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.8);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+        background: white;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        text-align: center;
+    }
+    .modal-content img {
+        max-width: 100%;
+        max-height: 80vh;
+        display: block;
+        margin: 0 auto;
+    }
+    .modal-close {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        width: 30px;
+        height: 30px;
+        background: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 30px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        color: #333;
+        font-family: sans-serif;
+    }
+    .modal-close:hover {
+        background: #f0f0f0;
+    }
+  </style>
+    
+    <!-- Load Libraries (UMD) -->
+    <script src="./libs/three.min.js"></script>
+    <script src="./libs/PLYLoader.js"></script>
+    <script src="./libs/OrbitControls.js"></script>
+    <!-- Load Embedded Data -->
+    <script src="./models.js"></script>
+</head>
+<body>
+  <h1>Dense Reconstruction Visualization</h1>
+  
+  <div style="max-width: 1400px; margin: 0 auto 20px auto; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6; font-size: 0.95em; line-height: 1.6;">
+    <p style="margin: 0 0 10px 0;">Below we provide an interactive comparison of π³ predicted (pre-trained vs fine-tuned) and ground-truth point maps on five randomly selected scenes from the UnSceneRecon test set. VGGT and WorldMirror results are omitted due to size constraints (but static visualizations are provided in Figure 4 in the accompanying supplementary PDF document). The grey bar shows the scene name and REC in meters of both models (pre-trained and fine-tuned).</p>
+    <p style="margin: 0 0 10px 0;">As illustrated below, the quality of the dense prediction head is not compromised, even though our alignment scheme does not directly supervise these dense predictions.</p>
+    <p style="margin: 0; font-weight: bold;">Controls:</p>
+    <ul style="margin: 5px 0 0 20px; padding: 0;">
+        <li><strong>Point Map Navigation:</strong> Left Click + Drag to Rotate, Right Click + Drag to Pan, Scroll to Zoom.</li>
+        <li><strong>Scene Selection:</strong> Use Previous/Next buttons or keyboard (<strong>A</strong>/<strong>←</strong> for previous, <strong>D</strong>/<strong>→</strong> for next). Jump to a specific scene using the dropdown menu.</li>
+        <li><strong>View Images:</strong> Click <strong>"See Images For Recon"</strong> to view the images used for the reconstruction of the current scene.</li>
+        <li><strong>Switch View:</strong> Click <strong>"To RelRot Results"</strong> to view pair-wise relative rotation comparisons.</li>
+    </ul>
+  </div>
+  
+  <div class="stats">
+    <div style="display: inline-block; vertical-align: middle; margin-right: 20px;">
+        <strong><strong>Scene: </strong></strong>
+        <select id="sceneSelect" style="margin-left: 10px;">
+            <!-- Populated by JS -->
+        </select>
+    </div>
+    <div style="display: inline-block; vertical-align: middle; border-left: 1px solid #dee2e6; padding-left: 15px; margin-left: 10px;">
+        <a href="../viewer.html" class="btn btn-primary" style="text-decoration: none; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">To RelRot Results</a>
+    </div>
+  </div>
+
+  <div class="pair-container">
+      <div class="pair-header" id="metricsHeader">
+        <!-- Populated by JS -->
+      </div>
+      <div id="viewer-content">
+          <div id="view-base" class="view">
+              <div class="label">Prediction (Pre-trained)</div>
+              <div class="loading" id="loading-base">Loading...</div>
+          </div>
+          <div id="view-ft" class="view">
+              <div class="label">Prediction (Fine-tuned)</div>
+              <div class="loading" id="loading-ft">Loading...</div>
+          </div>
+          <div id="view-gt" class="view">
+              <div class="label">Ground-truth</div>
+              <div class="loading" id="loading-gt">Loading...</div>
+          </div>
+          <button id="viewImagesBtn" class="floating-btn">See Images For Recon</button>
+      </div>
+  </div>
+
+  <div class="pagination-controls" style="text-align: center; margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+      <!-- Simple Prev/Next logic for scenes -->
+    <button id="prevBtn" class="btn btn-primary" style="min-width: 110px;">← Previous</button>
+    <span class="page-info" id="sceneInfo" style="margin: 0 20px; font-weight: bold;">Scene 1 of 5</span>
+    <button id="nextBtn" class="btn btn-primary" style="min-width: 110px;">Next →</button>
+  </div>
+
+  <!-- Image Modal -->
+  <div id="imageModal" class="modal-overlay">
+      <div class="modal-content">
+          <div class="modal-close">&times;</div>
+          <h3 id="modalTitle" style="margin-top: 0; margin-bottom: 10px; color: #333;">Scene Images</h3>
+          <img id="modalImage" src="" alt="Scene Images">
+          <div id="modalError" style="display: none; color: red; padding: 20px;">Image not found</div>
+      </div>
+  </div>
+
+  <script>
+        const scenes = [
+            "Bodiam_Castle-0",
+            "Kamerlengo-0",
+            "Marmashen_Monastery-1",
+            "Naubat_Khana_(Red_Fort)-0",
+            "Pampanga_Provincial_Capitol-0"
+        ];
+
+        const types = [
+            { id: 'view-base', suffix: '-pred_base.ply', name: 'base' },
+            { id: 'view-ft', suffix: '-pred_ft.ply', name: 'ft' },
+            { id: 'view-gt', suffix: '-gt.ply', name: 'gt' }
+        ];
+
+        // Metrics Data (Overall-med)
+        const metrics = {
+            "Marmashen_Monastery-1": { base: 0.09744576292, ft: 0.1095008745 },
+            "Naubat_Khana_(Red_Fort)-0": { base: 0.2300007896, ft: 0.1833547702 },
+            "Pampanga_Provincial_Capitol-0": { base: 0.1096466445, ft: 0.1306574438 },
+            "Kamerlengo-0": { base: 1.009640816, ft: 1.001438576 },
+            "Bodiam_Castle-0": { base: 1.216595646, ft: 1.068337266 }
+        };
+
+        let currentSceneIndex = 0;
+        const views = {};
+        const loader = new THREE.PLYLoader();
+        
+        // Initialize scenes
+        types.forEach(type => {
+            const container = document.getElementById(type.id);
+            
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff);
+            
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(1, 1, 1);
+            scene.add(dirLight);
+
+            const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+            dirLight2.position.set(-1, -1, -0.5);
+            scene.add(dirLight2);
+
+            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 2000);
+            camera.position.set(0, 0, 5);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            // Fix: PLYLoader converts colors to Linear, so we must output sRGB
+            renderer.outputEncoding = THREE.sRGBEncoding; 
+            container.appendChild(renderer.domElement);
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+
+            views[type.name] = { scene, camera, renderer, controls, container, mesh: null, loadingElem: document.getElementById('loading-' + type.name) };
+        });
+
+        // Sync controls
+        const controls = Object.values(views).map(v => v.controls);
+        let isUpdating = false;
+        controls.forEach(control => {
+            control.addEventListener('change', () => {
+                if (isUpdating) return;
+                isUpdating = true;
+
+                const sourceCam = control.object;
+                const targetPos = sourceCam.position;
+                const targetQuat = sourceCam.quaternion;
+                const targetTarget = control.target;
+
+                controls.forEach(c => {
+                    if (c === control) return;
+                    c.object.position.copy(targetPos);
+                    c.object.quaternion.copy(targetQuat);
+                    c.target.copy(targetTarget);
+                    c.update();
+                });
+                
+                isUpdating = false;
+            });
+        });
+
+        // Handle resize
+        window.addEventListener('resize', onWindowResize);
+        function onWindowResize() {
+            types.forEach(type => {
+                const v = views[type.name];
+                v.camera.aspect = v.container.clientWidth / v.container.clientHeight;
+                v.camera.updateProjectionMatrix();
+                v.renderer.setSize(v.container.clientWidth, v.container.clientHeight);
+            });
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            Object.values(views).forEach(v => {
+                v.controls.update();
+                v.renderer.render(v.scene, v.camera);
+            });
+        }
+        animate();
+
+        // UI Logic
+        const sceneSelect = document.getElementById('sceneSelect');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const sceneInfo = document.getElementById('sceneInfo');
+        const metricsHeader = document.getElementById('metricsHeader');
+
+        // Populate dropdown
+        scenes.forEach((scene, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            // Format scene name for display (remove -0, -1 suffix and replace underscores)
+            option.textContent = scene.replace(/-\d+$/, '').replace(/_/g, ' ');
+            sceneSelect.appendChild(option);
+        });
+
+        sceneSelect.addEventListener('change', (e) => {
+            currentSceneIndex = parseInt(e.target.value);
+            loadScene(scenes[currentSceneIndex]);
+            updateUI();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSceneIndex > 0) {
+                currentSceneIndex--;
+                loadScene(scenes[currentSceneIndex]);
+                updateUI();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSceneIndex < scenes.length - 1) {
+                currentSceneIndex++;
+                loadScene(scenes[currentSceneIndex]);
+                updateUI();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            // Don't trigger if user is typing in an input field
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.tagName === 'SELECT') {
+                return;
+            }
+            
+            // A key or Left Arrow: previous
+            if (event.key === 'a' || event.key === 'A' || event.key === 'ArrowLeft') {
+                if (currentSceneIndex > 0) {
+                    currentSceneIndex--;
+                    loadScene(scenes[currentSceneIndex]);
+                    updateUI();
+                }
+            }
+            // D key or Right Arrow: next
+            else if (event.key === 'd' || event.key === 'D' || event.key === 'ArrowRight') {
+                if (currentSceneIndex < scenes.length - 1) {
+                    currentSceneIndex++;
+                    loadScene(scenes[currentSceneIndex]);
+                    updateUI();
+                }
+            }
+        });
+
+        function updateUI() {
+            sceneSelect.value = currentSceneIndex;
+            // Format scene name for display (remove -0, -1 suffix and replace underscores)
+            let displaySceneName = scenes[currentSceneIndex].replace(/-\d+$/, '').replace(/_/g, ' ');
+            
+            sceneInfo.textContent = `Scene ${currentSceneIndex + 1} of ${scenes.length}`;
+            prevBtn.disabled = currentSceneIndex === 0;
+            nextBtn.disabled = currentSceneIndex === scenes.length - 1;
+
+            // Update metrics header
+            const currentScene = scenes[currentSceneIndex];
+            const data = metrics[currentScene] || { base: 0, ft: 0 };
+            // Force update text content
+            if (metricsHeader) {
+                metricsHeader.innerHTML = `Scene: ${displaySceneName} | Pre-trained REC: ${data.base.toFixed(3)}m | Fine-tuned REC: ${data.ft.toFixed(3)}m`;
+            }
+        }
+
+        function centerCamera(camera, controls, geometry, sceneName) {
+            geometry.computeBoundingBox();
+            const center = geometry.boundingBox.getCenter(new THREE.Vector3());
+            const size = geometry.boundingBox.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const fov = camera.fov * (Math.PI / 180);
+            let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+            
+            // Scene-specific zoom adjustments
+            if (sceneName.includes("Bodiam") || sceneName.includes("Kamerlengo")) {
+                cameraZ *= 0.5; // Zoom in
+            } else if (sceneName.includes("Marmashen")) {
+                cameraZ *= 2.2; // Zoom out more
+            } else if (sceneName.includes("Naubat_Khana")) {
+                cameraZ *= 0.5; // Zoom in more
+            } else {
+                cameraZ *= 1.5; // Default zoom
+            }
+            
+            // Vertical Shift (Pan) logic
+            // To shift model DOWN on screen, we shift the camera target UP.
+            let targetY = center.y;
+            if (sceneName.includes("Marmashen")) {
+                targetY += maxDim * 0.6;
+            } else if (sceneName.includes("Kamerlengo")) {
+                targetY += maxDim * 0.2; // Shift target up
+            }
+            
+            // Horizontal Shift (Pan) logic
+            let targetX = center.x;
+            if (sceneName.includes("Bodiam")) {
+                // Shift camera/target LEFT means looking at a point to the left.
+                targetX -= maxDim * 0.2; 
+            }
+
+            const target = new THREE.Vector3(targetX, targetY, center.z);
+            const camHeight = maxDim * 0.2; // Keep camera slightly above target level
+
+            // Specific rotation for scenes facing backward
+            if (sceneName.includes("Pampanga")) {
+                // Rotate 180 degrees horizontally (around Y) means moving camera to opposite Z side
+                camera.position.set(target.x, target.y + camHeight, target.z - cameraZ);
+            } else {
+                camera.position.set(target.x, target.y + camHeight, target.z + cameraZ);
+            }
+            
+            camera.lookAt(target);
+            controls.target.copy(target);
+            controls.update();
+        }
+
+        function base64ToArrayBuffer(base64) {
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        async function loadScene(sceneName) {
+            const promises = types.map(type => {
+                const v = views[type.name];
+                v.loadingElem.style.display = 'block';
+                
+                if (v.mesh) {
+                    v.scene.remove(v.mesh);
+                    v.mesh.geometry.dispose();
+                    if (v.mesh.material.map) v.mesh.material.map.dispose();
+                    v.mesh.material.dispose();
+                    v.mesh = null;
+                }
+
+                const filename = `${sceneName}${type.suffix}`;
+                
+                return new Promise((resolve) => {
+                    const b64Data = window.MODELS && window.MODELS[filename];
+                    
+                    if (b64Data) {
+                        try {
+                            const data = base64ToArrayBuffer(b64Data);
+                            const geometry = loader.parse(data);
+                            geometry.computeVertexNormals();
+                            
+                            // Center geometry at origin for Naubat Khana scene
+                            if (sceneName.includes("Naubat_Khana")) {
+                                const positions = geometry.getAttribute('position');
+                                const count = positions.count;
+                                let meanX = 0, meanY = 0, meanZ = 0;
+                                
+                                // Compute mean position
+                                for (let i = 0; i < count; i++) {
+                                    meanX += positions.getX(i);
+                                    meanY += positions.getY(i);
+                                    meanZ += positions.getZ(i);
+                                }
+                                meanX /= count;
+                                meanY /= count;
+                                meanZ /= count;
+                                
+                                // Translate all vertices to center at origin
+                                for (let i = 0; i < count; i++) {
+                                    positions.setX(i, positions.getX(i) - meanX);
+                                    positions.setY(i, positions.getY(i) - meanY);
+                                    positions.setZ(i, positions.getZ(i) - meanZ);
+                                }
+                                positions.needsUpdate = true;
+                                geometry.computeBoundingBox();
+                            }
+                            
+                            console.log(`Loaded ${filename}, vertices: ${geometry.getAttribute('position').count}`);
+                            let material;
+                            if (geometry.getAttribute('color')) {
+                                console.log('  Has vertex colors');
+                                material = new THREE.PointsMaterial({ size: 0.015, vertexColors: true });
+                            } else {
+                                console.warn('  No vertex colors found, using default.');
+                                material = new THREE.PointsMaterial({ size: 0.015, color: 0xff5500 });
+                            }
+                            const points = new THREE.Points(geometry, material);
+                            points.rotation.x = Math.PI; // Fix orientation
+                            
+                            v.scene.add(points);
+                            v.mesh = points;
+                            v.loadingElem.style.display = 'none';
+                            resolve({ geometry, view: v });
+                        } catch (e) {
+                            console.error("Error parsing " + filename, e);
+                            v.loadingElem.textContent = 'Error parsing';
+                            resolve(null);
+                        }
+                    } else {
+                        console.error("Model not found in MODELS: " + filename);
+                        v.loadingElem.textContent = 'Not Found';
+                        resolve(null);
+                    }
+                });
+            });
+
+            const results = await Promise.all(promises);
+            
+            // Center camera on first result
+            const firstResult = results.find(r => r && r.geometry);
+            if (firstResult) {
+                const geometry = firstResult.geometry;
+                types.forEach(type => {
+                    const v = views[type.name];
+                    centerCamera(v.camera, v.controls, geometry, sceneName);
+                });
+            }
+        }
+
+        // Initial load
+        if (scenes.length > 0) {
+            loadScene(scenes[0]);
+            updateUI();
+        }
+
+        // Modal Logic
+        const viewImagesBtn = document.getElementById('viewImagesBtn');
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalClose = document.querySelector('.modal-close');
+        const modalError = document.getElementById('modalError');
+
+        viewImagesBtn.addEventListener('click', () => {
+            const currentScene = scenes[currentSceneIndex];
+            const imagePath = `./images/${currentScene}_whitebg.png`;
+            
+            modalTitle.textContent = currentScene.replace(/-\d+$/, '').replace(/_/g, ' ');
+            modalImage.style.display = 'block';
+            modalError.style.display = 'none';
+            modalImage.src = imagePath;
+            
+            modalImage.onerror = () => {
+                modalImage.style.display = 'none';
+                modalError.style.display = 'block';
+                modalError.textContent = `Image not found: ${imagePath}`;
+            };
+
+            imageModal.style.display = 'flex';
+        });
+
+        modalClose.addEventListener('click', () => {
+            imageModal.style.display = 'none';
+        });
+
+        imageModal.addEventListener('click', (e) => {
+            if (e.target === imageModal) {
+                imageModal.style.display = 'none';
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && imageModal.style.display === 'flex') {
+                imageModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
