@@ -12,6 +12,7 @@ from typing import Dict, Iterable, List, Tuple
 import numpy as np
 from PIL import Image
 from scipy import stats
+from scipy.spatial.transform import Rotation as R
 
 
 def _load_overlap_errors(path: Path, overlap: str) -> np.ndarray:
@@ -155,6 +156,52 @@ def _save_image_under_limit(src: Path, dest: Path, max_kb: int) -> bool:
     return False
 
 
+def _infer_viz_pairs_path(results_path: Path) -> Path:
+    """Derive the viz_pairs path from a test_results path."""
+    return results_path.with_name(results_path.name.replace("test_results", "viz_pairs"))
+
+
+def _load_viz_pairs(path: Path) -> Dict[str, dict]:
+    """Load per-pair rotation info from a viz_pairs .npy file."""
+    if not path or not path.exists():
+        print(f"⚠️  Viz pairs file not found: {path}")
+        return {}
+    data = np.load(path, allow_pickle=True).item()
+    mapping: Dict[str, dict] = {}
+    for overlap_dict in data.values():
+        if not isinstance(overlap_dict, dict):
+            continue
+        for bucket_entries in overlap_dict.values():
+            if not isinstance(bucket_entries, (list, tuple)):
+                continue
+            for entry in bucket_entries:
+                pair_idx = str(entry.get("idx"))
+                mapping[pair_idx] = entry
+    print(f"Loaded {len(mapping)} viz pair entries from {path}")
+    return mapping
+
+
+def _rotation_matrix_to_yaw_pitch(rot_matrix: np.ndarray) -> Tuple[float, float]:
+    """Convert rotation matrix to yaw/pitch in degrees, matching visualization scripts."""
+    rot = R.from_matrix(rot_matrix)
+    phi, theta, psi = rot.as_euler('ZXY', degrees=True)
+    yaw = float(psi)
+    pitch = float(-theta)
+    return yaw, pitch
+
+
+def _extract_angles(entry: dict, key: str) -> Tuple[float, float]:
+    if not entry or key not in entry:
+        return None, None
+    mat = np.asarray(entry[key], dtype=float)
+    if mat.shape != (3, 3):
+        return None, None
+    try:
+        return _rotation_matrix_to_yaw_pitch(mat)
+    except Exception:
+        return None, None
+
+
 def sample_pairs_and_export_images(
     matched_pairs: List[Dict],
     bin_edges: np.ndarray,
@@ -163,6 +210,8 @@ def sample_pairs_and_export_images(
     max_kb: int,
     seed: int,
     max_deg: float = 160.0,
+    base_viz_pairs: Dict[str, dict] = None,
+    finetune_viz_pairs: Dict[str, dict] = None,
 ) -> List[Dict]:
     if num_pairs <= 0:
         return []
@@ -208,6 +257,7 @@ def sample_pairs_and_export_images(
             continue
 
         pair_idx = entry["pair_idx"]
+        pair_idx_str = str(pair_idx)
         pair_data = entry["pair_data"]
         img1_src = Path(pair_data["img1"]["path"])
         img2_src = Path(pair_data["img2"]["path"])
@@ -232,6 +282,15 @@ def sample_pairs_and_export_images(
             except ValueError:
                 pass
 
+        base_entry = (base_viz_pairs or {}).get(pair_idx_str)
+        finetune_entry = (finetune_viz_pairs or {}).get(pair_idx_str)
+        # Prefer base entry for GT, fallback to finetuned entry
+        gt_entry = base_entry or finetune_entry
+
+        gt_yaw, gt_pitch = _extract_angles(gt_entry, "gt_rel_R") if gt_entry else (None, None)
+        base_yaw, base_pitch = _extract_angles(base_entry, "pred_rel_R") if base_entry else (None, None)
+        finetune_yaw, finetune_pitch = _extract_angles(finetune_entry, "pred_rel_R") if finetune_entry else (None, None)
+
         exported.append(
             {
                 "pairIdx": pair_idx,
@@ -241,6 +300,12 @@ def sample_pairs_and_export_images(
                 "sceneName": scene_name,
                 "image1": f"./static/images/histogram_images/{img1_dest.name}",
                 "image2": f"./static/images/histogram_images/{img2_dest.name}",
+                "gtYaw": gt_yaw,
+                "gtPitch": gt_pitch,
+                "baseYaw": base_yaw,
+                "basePitch": base_pitch,
+                "finetunedYaw": finetune_yaw,
+                "finetunedPitch": finetune_pitch,
             }
         )
         selected_errors.append(ft_error)
@@ -330,6 +395,18 @@ def parse_args() -> argparse.Namespace:
         help="Upper bound for rotation errors in degrees (default: 160)",
     )
     parser.add_argument(
+        "--base_viz_pairs",
+        type=Path,
+        default=None,
+        help="Path to base model viz_pairs npy (auto-inferred if not provided).",
+    )
+    parser.add_argument(
+        "--finetune_viz_pairs",
+        type=Path,
+        default=None,
+        help="Path to finetuned model viz_pairs npy (auto-inferred if not provided).",
+    )
+    parser.add_argument(
         "--overlap",
         default="none",
         help="Overlap category to extract (default: none)",
@@ -360,6 +437,10 @@ def main() -> None:
 
     base_errors = _load_overlap_errors(args.base, args.overlap)
     ft_errors = _load_overlap_errors(args.finetune, args.overlap)
+    base_viz_path = args.base_viz_pairs or _infer_viz_pairs_path(args.base)
+    ft_viz_path = args.finetune_viz_pairs or _infer_viz_pairs_path(args.finetune)
+    base_viz_pairs = _load_viz_pairs(base_viz_path) if args.num_pairs > 0 else {}
+    finetune_viz_pairs = _load_viz_pairs(ft_viz_path) if args.num_pairs > 0 else {}
 
     bin_edges = np.linspace(0.0, args.max_deg, args.bins + 1)
     base_counts, _ = _histogram(base_errors, bin_edges)
@@ -415,6 +496,8 @@ def main() -> None:
             args.max_image_kb,
             args.pairs_seed,
             args.max_deg,
+            base_viz_pairs=base_viz_pairs,
+            finetune_viz_pairs=finetune_viz_pairs,
         )
         payload["pairs"] = exported_pairs
 

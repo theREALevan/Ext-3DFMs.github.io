@@ -1357,7 +1357,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 4.741335662700312,
       "sceneName": "District court in Bydgoszcz",
       "image1": "./static/images/histogram_images/pair_742_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_742_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_742_img2.jpg",
+      "gtYaw": 49.44557849133864,
+      "gtPitch": 12.898113951717281,
+      "baseYaw": 46.617878308159916,
+      "basePitch": 13.298111942658494,
+      "finetunedYaw": 47.787512069598066,
+      "finetunedPitch": 13.397827614986687
     },
     {
       "pairIdx": "490",
@@ -1366,7 +1372,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 105.36462794123099,
       "sceneName": "Hogevank Monastery",
       "image1": "./static/images/histogram_images/pair_490_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_490_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_490_img2.jpg",
+      "gtYaw": 166.66745288653445,
+      "gtPitch": 15.377597472818982,
+      "baseYaw": -63.26249893751832,
+      "basePitch": -6.761149554179937,
+      "finetunedYaw": -88.11594416157222,
+      "finetunedPitch": -2.166404505622049
     },
     {
       "pairIdx": "334",
@@ -1375,7 +1387,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 1.8882383042428108,
       "sceneName": "Kirants Monastery",
       "image1": "./static/images/histogram_images/pair_334_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_334_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_334_img2.jpg",
+      "gtYaw": 7.081096531851268,
+      "gtPitch": -16.413032120783676,
+      "baseYaw": 7.680628993681651,
+      "basePitch": -14.930588444678461,
+      "finetunedYaw": 5.813012101032397,
+      "finetunedPitch": -16.35050047761609
     },
     {
       "pairIdx": "397",
@@ -1384,7 +1402,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 48.16980466707513,
       "sceneName": "Waimea Canyon",
       "image1": "./static/images/histogram_images/pair_397_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_397_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_397_img2.jpg",
+      "gtYaw": 100.34666173176115,
+      "gtPitch": -12.615022046117637,
+      "baseYaw": 42.62339494003242,
+      "basePitch": -2.7922978992346663,
+      "finetunedYaw": 53.616943572958206,
+      "finetunedPitch": -3.5937125701174053
     },
     {
       "pairIdx": "204",
@@ -1393,7 +1417,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 87.58427584949412,
       "sceneName": "Jerpoint Abbey",
       "image1": "./static/images/histogram_images/pair_204_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_204_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_204_img2.jpg",
+      "gtYaw": 143.7858865558724,
+      "gtPitch": 8.004824553076515,
+      "baseYaw": 54.536627307879286,
+      "basePitch": -8.720060121550368,
+      "finetunedYaw": 57.523342785506465,
+      "finetunedPitch": -8.267509127042363
     },
     {
       "pairIdx": "599",
@@ -1402,7 +1432,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 24.909617359660167,
       "sceneName": "Grodno Castle",
       "image1": "./static/images/histogram_images/pair_599_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_599_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_599_img2.jpg",
+      "gtYaw": 37.35989616245858,
+      "gtPitch": -7.485990094044003,
+      "baseYaw": 14.43093750437494,
+      "basePitch": -17.869295842054097,
+      "finetunedYaw": 14.244503679499788,
+      "finetunedPitch": -17.68706565153532
     },
     {
       "pairIdx": "525",
@@ -1411,7 +1447,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 20.319539159120314,
       "sceneName": "Porte des Allemands (Metz)",
       "image1": "./static/images/histogram_images/pair_525_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_525_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_525_img2.jpg",
+      "gtYaw": -109.95374731086163,
+      "gtPitch": 14.02577333433395,
+      "baseYaw": -70.10469971244486,
+      "basePitch": 7.2930908752402495,
+      "finetunedYaw": -89.39396823544675,
+      "finetunedPitch": 9.592599908496792
     },
     {
       "pairIdx": "200",
@@ -1420,7 +1462,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 13.499525436670071,
       "sceneName": "Pieskowa Ska\u0142a Castle",
       "image1": "./static/images/histogram_images/pair_200_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_200_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_200_img2.jpg",
+      "gtYaw": -97.94587168637027,
+      "gtPitch": 2.4741243079516813,
+      "baseYaw": -79.64357907252183,
+      "basePitch": -1.1163998445628533,
+      "finetunedYaw": -85.18892654363673,
+      "finetunedPitch": 0.55324671548037
     },
     {
       "pairIdx": "518",
@@ -1429,7 +1477,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 151.2011920005232,
       "sceneName": "Pampanga Provincial Capitol",
       "image1": "./static/images/histogram_images/pair_518_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_518_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_518_img2.jpg",
+      "gtYaw": 73.01346438531634,
+      "gtPitch": 8.877536364643797,
+      "baseYaw": -3.44863851691385,
+      "basePitch": -2.383664919486439,
+      "finetunedYaw": -73.63959341824514,
+      "finetunedPitch": 7.876823364451276
     },
     {
       "pairIdx": "413",
@@ -1438,7 +1492,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 27.587034359384333,
       "sceneName": "Grauman's Chinese Theatre",
       "image1": "./static/images/histogram_images/pair_413_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_413_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_413_img2.jpg",
+      "gtYaw": 86.13968842605283,
+      "gtPitch": 37.80537347731559,
+      "baseYaw": 57.21597187543615,
+      "basePitch": 31.982769443238084,
+      "finetunedYaw": 63.10493515447978,
+      "finetunedPitch": 34.59151236854827
     },
     {
       "pairIdx": "331",
@@ -1447,7 +1507,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 77.18421781607816,
       "sceneName": "Dimatsler",
       "image1": "./static/images/histogram_images/pair_331_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_331_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_331_img2.jpg",
+      "gtYaw": 178.3262539701765,
+      "gtPitch": 49.6631176827581,
+      "baseYaw": -54.866914390287064,
+      "basePitch": -4.829705685138751,
+      "finetunedYaw": -102.37131185887944,
+      "finetunedPitch": 8.725417314090931
     },
     {
       "pairIdx": "51",
@@ -1456,7 +1522,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 80.3296623249569,
       "sceneName": "Carew Castle",
       "image1": "./static/images/histogram_images/pair_51_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_51_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_51_img2.jpg",
+      "gtYaw": 125.24839994934392,
+      "gtPitch": 19.414225380504874,
+      "baseYaw": 32.55026559352948,
+      "basePitch": 1.1315994783751746,
+      "finetunedYaw": 47.51066043477053,
+      "finetunedPitch": 2.5536490522017647
     },
     {
       "pairIdx": "23",
@@ -1465,7 +1537,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 10.747642068334564,
       "sceneName": "Horse Guards (building)",
       "image1": "./static/images/histogram_images/pair_23_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_23_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_23_img2.jpg",
+      "gtYaw": -77.15836023523212,
+      "gtPitch": -3.854597711875997,
+      "baseYaw": -20.9163160761622,
+      "basePitch": -23.990483253613295,
+      "finetunedYaw": -85.7151025027169,
+      "finetunedPitch": 0.39852903377409216
     },
     {
       "pairIdx": "657",
@@ -1474,7 +1552,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 22.330807213091294,
       "sceneName": "Waimea Canyon",
       "image1": "./static/images/histogram_images/pair_657_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_657_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_657_img2.jpg",
+      "gtYaw": -77.10115805747321,
+      "gtPitch": -12.399968312616432,
+      "baseYaw": -47.87531117718802,
+      "basePitch": -8.14625109769449,
+      "finetunedYaw": -56.14433057993072,
+      "finetunedPitch": -8.99300476072448
     },
     {
       "pairIdx": "389",
@@ -1483,7 +1567,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 99.38549700801012,
       "sceneName": "Christ tower, Theodosia",
       "image1": "./static/images/histogram_images/pair_389_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_389_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_389_img2.jpg",
+      "gtYaw": 77.31743451398623,
+      "gtPitch": 37.48561108207738,
+      "baseYaw": -45.010030390504525,
+      "basePitch": 33.20720152808978,
+      "finetunedYaw": -13.324705348919252,
+      "finetunedPitch": 30.195977506597657
     },
     {
       "pairIdx": "378",
@@ -1492,7 +1582,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 36.754269838672734,
       "sceneName": "Visoki De\u010dani",
       "image1": "./static/images/histogram_images/pair_378_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_378_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_378_img2.jpg",
+      "gtYaw": 168.30709103718806,
+      "gtPitch": 65.66228651435817,
+      "baseYaw": 127.01383186442695,
+      "basePitch": 58.32907582248446,
+      "finetunedYaw": 134.46345019236352,
+      "finetunedPitch": 61.866833100799006
     },
     {
       "pairIdx": "161",
@@ -1501,7 +1597,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 33.32368846567484,
       "sceneName": "Pavlovac Monastery",
       "image1": "./static/images/histogram_images/pair_161_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_161_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_161_img2.jpg",
+      "gtYaw": 82.50013617075041,
+      "gtPitch": -4.217147449353125,
+      "baseYaw": 76.88837480880302,
+      "basePitch": -4.262571215283684,
+      "finetunedYaw": 49.81624983091465,
+      "finetunedPitch": -12.132710308249715
     },
     {
       "pairIdx": "233",
@@ -1510,7 +1612,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 46.09563431225356,
       "sceneName": "Soroca Fort",
       "image1": "./static/images/histogram_images/pair_233_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_233_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_233_img2.jpg",
+      "gtYaw": -66.6003114027132,
+      "gtPitch": 32.8802847154706,
+      "baseYaw": 20.982896641106468,
+      "basePitch": 22.945522071521847,
+      "finetunedYaw": -25.02942127153819,
+      "finetunedPitch": 25.416092815114247
     },
     {
       "pairIdx": "426",
@@ -1519,7 +1627,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 51.64756222001501,
       "sceneName": "Sidi Salem Dam",
       "image1": "./static/images/histogram_images/pair_426_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_426_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_426_img2.jpg",
+      "gtYaw": 161.4164150581457,
+      "gtPitch": 2.9435471717159847,
+      "baseYaw": 96.6693565910848,
+      "basePitch": 3.3796537608557338,
+      "finetunedYaw": 109.80064184192427,
+      "finetunedPitch": 3.705567711460937
     },
     {
       "pairIdx": "218",
@@ -1528,7 +1642,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 7.082027778398152,
       "sceneName": "Hogevank Monastery",
       "image1": "./static/images/histogram_images/pair_218_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_218_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_218_img2.jpg",
+      "gtYaw": -125.6329005265345,
+      "gtPitch": 12.564339176087518,
+      "baseYaw": -42.68068718600262,
+      "basePitch": 17.115195701497314,
+      "finetunedYaw": -132.378988618875,
+      "finetunedPitch": 9.214450915556137
     },
     {
       "pairIdx": "473",
@@ -1537,7 +1657,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 17.72372558149962,
       "sceneName": "Studenica Monastery",
       "image1": "./static/images/histogram_images/pair_473_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_473_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_473_img2.jpg",
+      "gtYaw": 91.56201393557954,
+      "gtPitch": 29.162960877287365,
+      "baseYaw": 38.502315195405664,
+      "basePitch": 0.8423981329540707,
+      "finetunedYaw": 86.91990484079,
+      "finetunedPitch": 11.972802510401502
     },
     {
       "pairIdx": "316",
@@ -1546,7 +1672,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 72.17016128028011,
       "sceneName": "C\u0113sis Castle",
       "image1": "./static/images/histogram_images/pair_316_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_316_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_316_img2.jpg",
+      "gtYaw": 175.98470384228307,
+      "gtPitch": -4.425863841253985,
+      "baseYaw": -88.22265489197193,
+      "basePitch": -10.815516506688791,
+      "finetunedYaw": -113.00933330828218,
+      "finetunedPitch": -7.695632508296031
     },
     {
       "pairIdx": "260",
@@ -1555,7 +1687,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 91.9272443316334,
       "sceneName": "Beeston Castle inner gatehouse",
       "image1": "./static/images/histogram_images/pair_260_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_260_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_260_img2.jpg",
+      "gtYaw": -167.1772328249285,
+      "gtPitch": 13.68930617122743,
+      "baseYaw": 86.19927371852293,
+      "basePitch": -6.088446592913359,
+      "finetunedYaw": 101.70407899776005,
+      "finetunedPitch": -2.5031382676181053
     },
     {
       "pairIdx": "305",
@@ -1564,7 +1702,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 74.2190323529931,
       "sceneName": "Batenburg Castle",
       "image1": "./static/images/histogram_images/pair_305_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_305_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_305_img2.jpg",
+      "gtYaw": 72.66635770970079,
+      "gtPitch": 2.761987631675857,
+      "baseYaw": 111.28428251563726,
+      "basePitch": 0.5568839888214294,
+      "finetunedYaw": 146.75421967685818,
+      "finetunedPitch": 1.1048309584445146
     },
     {
       "pairIdx": "637",
@@ -1573,7 +1717,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 53.69668588781042,
       "sceneName": "Mosteiro de Santa Clara-a-Velha",
       "image1": "./static/images/histogram_images/pair_637_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_637_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_637_img2.jpg",
+      "gtYaw": 76.75651813281092,
+      "gtPitch": 2.073199788999921,
+      "baseYaw": -12.968105478815557,
+      "basePitch": 0.4358467961730733,
+      "finetunedYaw": 23.40360680224875,
+      "finetunedPitch": -0.5516222274687598
     },
     {
       "pairIdx": "529",
@@ -1582,7 +1732,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 62.23145975549357,
       "sceneName": "Bobolice Castle",
       "image1": "./static/images/histogram_images/pair_529_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_529_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_529_img2.jpg",
+      "gtYaw": 43.85209693688656,
+      "gtPitch": 4.699211583250306,
+      "baseYaw": -52.190569797096984,
+      "basePitch": 5.338936115824138,
+      "finetunedYaw": -15.551308464389894,
+      "finetunedPitch": -0.7605335398228612
     },
     {
       "pairIdx": "219",
@@ -1591,7 +1747,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 156.6743563508712,
       "sceneName": "David Gareja monastery complex",
       "image1": "./static/images/histogram_images/pair_219_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_219_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_219_img2.jpg",
+      "gtYaw": -123.1863906701412,
+      "gtPitch": -4.245618084280174,
+      "baseYaw": 21.83447445606322,
+      "basePitch": 1.7606631184512664,
+      "finetunedYaw": 80.56153010662939,
+      "finetunedPitch": 4.743745401141731
     },
     {
       "pairIdx": "159",
@@ -1600,7 +1762,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 41.30973963060902,
       "sceneName": "Uspensky Monastery in Bakhchisaray",
       "image1": "./static/images/histogram_images/pair_159_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_159_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_159_img2.jpg",
+      "gtYaw": -164.47445242519498,
+      "gtPitch": 36.98859210213985,
+      "baseYaw": -67.76348975586043,
+      "basePitch": -11.717827337975146,
+      "finetunedYaw": -119.55392621177339,
+      "finetunedPitch": 22.847124128635976
     },
     {
       "pairIdx": "53",
@@ -1609,7 +1777,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 120.30817125699042,
       "sceneName": "Akko Castle",
       "image1": "./static/images/histogram_images/pair_53_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_53_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_53_img2.jpg",
+      "gtYaw": -142.71571160704377,
+      "gtPitch": 15.48549721280871,
+      "baseYaw": -3.1706423727443984,
+      "basePitch": -1.6254049219369229,
+      "finetunedYaw": 94.89133400218122,
+      "finetunedPitch": 8.637677938795976
     },
     {
       "pairIdx": "72",
@@ -1618,7 +1792,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 69.08560039573598,
       "sceneName": "Astvatsnkal Monastery",
       "image1": "./static/images/histogram_images/pair_72_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_72_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_72_img2.jpg",
+      "gtYaw": -91.5958663280653,
+      "gtPitch": 5.421023533755858,
+      "baseYaw": 6.585985828252361,
+      "basePitch": -26.860714436535336,
+      "finetunedYaw": -26.938172077784404,
+      "finetunedPitch": -20.39554952949321
     },
     {
       "pairIdx": "178",
@@ -1627,7 +1807,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 138.84372706108545,
       "sceneName": "Castle Rising Castle",
       "image1": "./static/images/histogram_images/pair_178_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_178_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_178_img2.jpg",
+      "gtYaw": 78.62310985323536,
+      "gtPitch": 8.035839187382702,
+      "baseYaw": -51.37232887530754,
+      "basePitch": 2.911334923349213,
+      "finetunedYaw": -60.2309488409653,
+      "finetunedPitch": 1.1576830638017515
     },
     {
       "pairIdx": "538",
@@ -1636,7 +1822,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 108.55748768094001,
       "sceneName": "Slot Loevestein",
       "image1": "./static/images/histogram_images/pair_538_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_538_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_538_img2.jpg",
+      "gtYaw": 44.02457805698786,
+      "gtPitch": 33.87411893529895,
+      "baseYaw": -46.19633893166638,
+      "basePitch": 29.509332333696495,
+      "finetunedYaw": -62.81591033718673,
+      "finetunedPitch": 29.127690119466095
     },
     {
       "pairIdx": "19",
@@ -1645,7 +1837,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 85.26330915451646,
       "sceneName": "Dhanmondi Shahi Eidgah",
       "image1": "./static/images/histogram_images/pair_19_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_19_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_19_img2.jpg",
+      "gtYaw": -174.65282160999524,
+      "gtPitch": -3.057257932456543,
+      "baseYaw": -82.8878107211599,
+      "basePitch": -2.852326213740335,
+      "finetunedYaw": -89.55660248424257,
+      "finetunedPitch": -3.322679474591815
     },
     {
       "pairIdx": "375",
@@ -1654,7 +1852,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 110.96995442177217,
       "sceneName": "Castelo de Almourol",
       "image1": "./static/images/histogram_images/pair_375_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_375_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_375_img2.jpg",
+      "gtYaw": 72.30126225569627,
+      "gtPitch": -2.8324222832519674,
+      "baseYaw": -162.91259088856506,
+      "basePitch": 37.22963878440015,
+      "finetunedYaw": -98.56251838365802,
+      "finetunedPitch": -71.07511341396221
     },
     {
       "pairIdx": "648",
@@ -1663,7 +1867,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 102.26839399480268,
       "sceneName": "Burg Rheinstein",
       "image1": "./static/images/histogram_images/pair_648_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_648_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_648_img2.jpg",
+      "gtYaw": 80.83887523360384,
+      "gtPitch": 18.025928680230372,
+      "baseYaw": -12.400750199703168,
+      "basePitch": -2.3143623408665133,
+      "finetunedYaw": -9.872644208482987,
+      "finetunedPitch": -0.6837986031362694
     },
     {
       "pairIdx": "291",
@@ -1672,7 +1882,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 31.190545600230895,
       "sceneName": "Soroca Fort",
       "image1": "./static/images/histogram_images/pair_291_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_291_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_291_img2.jpg",
+      "gtYaw": -93.50713013400097,
+      "gtPitch": 3.532183418380547,
+      "baseYaw": -43.33173557936161,
+      "basePitch": 6.834041426384938,
+      "finetunedYaw": -62.93641230238196,
+      "finetunedPitch": 6.1476094346901595
     },
     {
       "pairIdx": "265",
@@ -1681,7 +1897,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 55.89749568904763,
       "sceneName": "Kremenets Castle",
       "image1": "./static/images/histogram_images/pair_265_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_265_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_265_img2.jpg",
+      "gtYaw": -58.755943752132936,
+      "gtPitch": 2.6286846035066014,
+      "baseYaw": 40.08426176568108,
+      "basePitch": 2.695392930032135,
+      "finetunedYaw": -2.876546508474625,
+      "finetunedPitch": 2.4084814848088727
     },
     {
       "pairIdx": "516",
@@ -1690,7 +1912,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 116.91675013265213,
       "sceneName": "Manasija Monastery",
       "image1": "./static/images/histogram_images/pair_516_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_516_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_516_img2.jpg",
+      "gtYaw": -156.4898081184862,
+      "gtPitch": 11.712545388129051,
+      "baseYaw": 81.51391700439113,
+      "basePitch": 3.3195970330611346,
+      "finetunedYaw": 85.91814486899267,
+      "finetunedPitch": 3.7530191342217862
     },
     {
       "pairIdx": "99",
@@ -1699,7 +1927,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 125.97983491426967,
       "sceneName": "Parque Estadual da Guarita",
       "image1": "./static/images/histogram_images/pair_99_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_99_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_99_img2.jpg",
+      "gtYaw": 79.77036925011959,
+      "gtPitch": 0.8468356881146742,
+      "baseYaw": 19.637267984072004,
+      "basePitch": 25.066347068276052,
+      "finetunedYaw": -50.60037026335132,
+      "finetunedPitch": 24.4933904455651
     },
     {
       "pairIdx": "38",
@@ -1708,7 +1942,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 66.70379169163954,
       "sceneName": "Manasija Monastery",
       "image1": "./static/images/histogram_images/pair_38_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_38_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_38_img2.jpg",
+      "gtYaw": -92.87825769763968,
+      "gtPitch": 17.210860018743723,
+      "baseYaw": 19.090740074021973,
+      "basePitch": -11.746011335374426,
+      "finetunedYaw": -32.10992379182508,
+      "finetunedPitch": -7.760810373434202
     },
     {
       "pairIdx": "237",
@@ -1717,7 +1957,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 153.47541526596711,
       "sceneName": "House of Begum Rokeya",
       "image1": "./static/images/histogram_images/pair_237_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_237_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_237_img2.jpg",
+      "gtYaw": -129.47202587828477,
+      "gtPitch": 5.920592740007445,
+      "baseYaw": 16.31148928673224,
+      "basePitch": 6.266979032100543,
+      "finetunedYaw": 76.89130013706091,
+      "finetunedPitch": 6.497519868717077
     },
     {
       "pairIdx": "79",
@@ -1726,7 +1972,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 133.02422607277398,
       "sceneName": "Neghuts Monastery",
       "image1": "./static/images/histogram_images/pair_79_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_79_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_79_img2.jpg",
+      "gtYaw": -152.7130819935049,
+      "gtPitch": 51.31233291594048,
+      "baseYaw": 50.85515338077677,
+      "basePitch": 20.185148277739536,
+      "finetunedYaw": 64.7725979721109,
+      "finetunedPitch": 26.281598566306695
     },
     {
       "pairIdx": "591",
@@ -1735,7 +1987,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 15.617445648490344,
       "sceneName": "Rig Castle",
       "image1": "./static/images/histogram_images/pair_591_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_591_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_591_img2.jpg",
+      "gtYaw": 109.21003342858316,
+      "gtPitch": -1.0436505924774195,
+      "baseYaw": 71.12629327752462,
+      "basePitch": 0.8806132744182479,
+      "finetunedYaw": 93.3771435118032,
+      "finetunedPitch": -3.3810932502266815
     },
     {
       "pairIdx": "104",
@@ -1744,7 +2002,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 58.115135002536064,
       "sceneName": "Abbaye de Cluny",
       "image1": "./static/images/histogram_images/pair_104_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_104_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_104_img2.jpg",
+      "gtYaw": 162.4189873144185,
+      "gtPitch": 17.71466823893205,
+      "baseYaw": 46.64836960536347,
+      "basePitch": -2.421180890349515,
+      "finetunedYaw": 103.61550232845298,
+      "finetunedPitch": 9.19153891700011
     },
     {
       "pairIdx": "181",
@@ -1753,7 +2017,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 94.77384107643165,
       "sceneName": "State Bank Building (Nizhny Novgorod)",
       "image1": "./static/images/histogram_images/pair_181_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_181_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_181_img2.jpg",
+      "gtYaw": -66.0488881338957,
+      "gtPitch": -0.4518398535479331,
+      "baseYaw": 8.644692841631226,
+      "basePitch": -8.863921290692753,
+      "finetunedYaw": 28.35165635545432,
+      "finetunedPitch": -6.56811187888528
     },
     {
       "pairIdx": "16",
@@ -1762,7 +2032,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 97.15808983860941,
       "sceneName": "Ostrogski Castle",
       "image1": "./static/images/histogram_images/pair_16_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_16_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_16_img2.jpg",
+      "gtYaw": -107.30577964964078,
+      "gtPitch": 20.837198895233403,
+      "baseYaw": 155.63141890185523,
+      "basePitch": 29.039301647401864,
+      "finetunedYaw": 148.12822178682063,
+      "finetunedPitch": 31.455496898513672
     },
     {
       "pairIdx": "58",
@@ -1771,7 +2047,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 43.86307752636631,
       "sceneName": "Mar Saba",
       "image1": "./static/images/histogram_images/pair_58_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_58_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_58_img2.jpg",
+      "gtYaw": -165.71407045201366,
+      "gtPitch": 17.875994111706188,
+      "baseYaw": -36.71845661449925,
+      "basePitch": 13.326700623692755,
+      "finetunedYaw": -122.30110097366885,
+      "finetunedPitch": 16.498798297880963
     },
     {
       "pairIdx": "170",
@@ -1780,7 +2062,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 82.94539266422763,
       "sceneName": "Jerpoint Abbey",
       "image1": "./static/images/histogram_images/pair_170_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_170_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_170_img2.jpg",
+      "gtYaw": 145.33586003945035,
+      "gtPitch": 1.932677394611808,
+      "baseYaw": 55.64855670503189,
+      "basePitch": -15.497594438195902,
+      "finetunedYaw": 64.16185119622406,
+      "finetunedPitch": -13.150583816698033
     },
     {
       "pairIdx": "276",
@@ -1789,7 +2077,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 123.22119019726698,
       "sceneName": "Kamerlengo",
       "image1": "./static/images/histogram_images/pair_276_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_276_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_276_img2.jpg",
+      "gtYaw": 115.32960281780633,
+      "gtPitch": 1.6273072413478944,
+      "baseYaw": -87.50563577395476,
+      "basePitch": -1.0056978117994935,
+      "finetunedYaw": -121.22644631419716,
+      "finetunedPitch": 3.629533802365541
     },
     {
       "pairIdx": "163",
@@ -1798,7 +2092,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 129.69320068294704,
       "sceneName": "Creux-du-Van",
       "image1": "./static/images/histogram_images/pair_163_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_163_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_163_img2.jpg",
+      "gtYaw": -136.32078245883338,
+      "gtPitch": -17.26860914056547,
+      "baseYaw": 68.12957555077303,
+      "basePitch": -4.363618392049904,
+      "finetunedYaw": 91.4780564743347,
+      "finetunedPitch": -7.689685145860499
     },
     {
       "pairIdx": "245",
@@ -1807,7 +2107,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 143.1379337395678,
       "sceneName": "Memorial Chorten, Thimphu",
       "image1": "./static/images/histogram_images/pair_245_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_245_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_245_img2.jpg",
+      "gtYaw": -77.37476888243093,
+      "gtPitch": 1.8643954999133872,
+      "baseYaw": 59.69401597595152,
+      "basePitch": 1.5951548552897665,
+      "finetunedYaw": 65.52144517433607,
+      "finetunedPitch": 2.4007999835201965
     },
     {
       "pairIdx": "250",
@@ -1816,7 +2122,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 89.68998525595251,
       "sceneName": "Horse Guards (building)",
       "image1": "./static/images/histogram_images/pair_250_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_250_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_250_img2.jpg",
+      "gtYaw": 77.05986378622501,
+      "gtPitch": 26.482433494318308,
+      "baseYaw": -18.530292930126706,
+      "basePitch": 29.6509492809216,
+      "finetunedYaw": -16.273284531859098,
+      "finetunedPitch": 31.038546859315602
     },
     {
       "pairIdx": "144",
@@ -1825,7 +2137,13 @@ window.HISTOGRAM_DATA["vggt_unscenepairs_t"] = {
       "finetunedError": 159.49379807676831,
       "sceneName": "Moszna Castle",
       "image1": "./static/images/histogram_images/pair_144_img1.jpg",
-      "image2": "./static/images/histogram_images/pair_144_img2.jpg"
+      "image2": "./static/images/histogram_images/pair_144_img2.jpg",
+      "gtYaw": 75.14968370965325,
+      "gtPitch": 6.822631091295778,
+      "baseYaw": -74.65966494368837,
+      "basePitch": 5.915806176650648,
+      "finetunedYaw": -83.8867171653508,
+      "finetunedPitch": 6.250838146632819
     }
   ]
 };

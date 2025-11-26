@@ -54,19 +54,29 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Update info overlay
     const sceneNameEl = document.getElementById('histogram-scene-name');
-    const baseErrorEl = document.getElementById('histogram-base-error');
-    const ftErrorEl = document.getElementById('histogram-ft-error');
+    const gtAnglesEl = document.getElementById('histogram-gt-angles');
+    const baseAnglesEl = document.getElementById('histogram-base-angles');
+    const ftAnglesEl = document.getElementById('histogram-ft-angles');
+    const formatAngles = (yaw, pitch) => {
+      if (typeof yaw === 'number' && typeof pitch === 'number' && !Number.isNaN(yaw) && !Number.isNaN(pitch)) {
+        return `${yaw.toFixed(1)}°, ${pitch.toFixed(1)}°`;
+      }
+      return '–';
+    };
     
     if (sceneNameEl) {
       // Extract scene name from image path or use pair index
       const sceneName = pair.sceneName || `Pair ${pair.pairIdx}`;
       sceneNameEl.textContent = sceneName;
     }
-    if (baseErrorEl) {
-      baseErrorEl.textContent = pair.baseError.toFixed(1);
+    if (gtAnglesEl) {
+      gtAnglesEl.textContent = formatAngles(pair.gtYaw, pair.gtPitch);
     }
-    if (ftErrorEl) {
-      ftErrorEl.textContent = pair.finetunedError.toFixed(1);
+    if (baseAnglesEl) {
+      baseAnglesEl.textContent = formatAngles(pair.baseYaw, pair.basePitch);
+    }
+    if (ftAnglesEl) {
+      ftAnglesEl.textContent = formatAngles(pair.finetunedYaw, pair.finetunedPitch);
     }
   };
 
