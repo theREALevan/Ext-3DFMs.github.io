@@ -1,9 +1,10 @@
 const RESULTS_DATA = {
-    "relative_rotation": {
-    "title": "Extreme Relative Rotation Estimation",
-    "description": "We report the median rotation error (MRE) and relative rotation accuracy (RA) at thresholds of 15° and 30°. As shown, our fine-tuned models (VGGT, WorldMirror, and π³) achieve consistent and substantial improvements across all test sets, establishing a new state of the art in extreme rotation estimation, outperforming the previous state-of-the-art method ExRot.",
+  "relative_rotation": {
+    "title": "Extreme Relative Rotation",
+    "description": "We report the median rotation error (MRE) and relative rotation accuracy (RA) at thresholds of 15° and 30°. As shown, our fine-tuned models (VGGT, WorldMirror, and π³) achieve consistent and substantial improvements across all test sets, establishing a new state of the art in extreme rotation estimation, outperforming the previous SOTA ExRot.",
+    "leftAxisTitle": "Median Rotation Error (degrees)",
     "datasets": {
-      "cambridge": {
+      "cambridge": {    
         "name": "sELP",
         "labels": ["MRE (↓)", "RA < 15° (↑)", "RA < 30° (↑)"],
         "metrics": [
@@ -169,6 +170,71 @@ const RESULTS_DATA = {
         ]
       }
     }
+  },
+  "multiview_pose": {
+    "title": "Multiview Pose",
+    "description": "We report relative rotation accuracy (RA), relative translation accuracy (TA), and AUC at a threshold of 30°. As shown, despite fine-tuning on image pairs and a rotation loss alone, rotation and translation accuracies are mostly preserved across all models, indicating that the aligned variants continue to perform well in multi-view settings.",
+    "leftAxisTitle": "Percentage",
+    "combineMetrics": true,
+    "yMax": 100,
+    "datasets": {
+      "re10k": {
+        "name": "RealEstate10K",
+        "labels": ["RA < 30° (↑)", "TA < 30° (↑)", "AUC < 30° (↑)"],
+        "metrics": [
+          { "label": "VGGT", "data": [99.91, 92.75, 77.28], "backgroundColor": "rgba(255, 99, 132, 0.5)", "borderColor": "rgba(255, 99, 132, 1)", "borderWidth": 1 },
+          { "label": "VGGT (FT)", "data": [99.99, 93.77, 79.11], "backgroundColor": "rgba(255, 99, 132, 1)", "borderColor": "rgba(255, 99, 132, 1)", "borderWidth": 1 },
+          { "label": "WorldMirror", "data": [99.99, 95.42, 85.93], "backgroundColor": "rgba(75, 192, 192, 0.5)", "borderColor": "rgba(75, 192, 192, 1)", "borderWidth": 1 },
+          { "label": "WorldMirror (FT)", "data": [99.99, 95.72, 85.52], "backgroundColor": "rgba(75, 192, 192, 1)", "borderColor": "rgba(75, 192, 192, 1)", "borderWidth": 1 },
+          { "label": "π³", "data": [99.99, 95.52, 87.14], "backgroundColor": "rgba(54, 162, 235, 0.5)", "borderColor": "rgba(54, 162, 235, 1)", "borderWidth": 1 },
+          { "label": "π³ (FT)", "data": [99.99, 95.21, 85.25], "backgroundColor": "rgba(54, 162, 235, 1)", "borderColor": "rgba(54, 162, 235, 1)", "borderWidth": 1 }
+        ]
+      },
+      "eth3d": {
+        "name": "ETH3D",
+        "labels": ["RA < 30° (↑)", "TA < 30° (↑)", "AUC < 30° (↑)"],
+        "metrics": [
+          { "label": "VGGT", "data": [96.41, 87.01, 72.52], "backgroundColor": "rgba(255, 99, 132, 0.5)", "borderColor": "rgba(255, 99, 132, 1)", "borderWidth": 1 },
+          { "label": "VGGT (FT)", "data": [96.41, 94.70, 79.30], "backgroundColor": "rgba(255, 99, 132, 1)", "borderColor": "rgba(255, 99, 132, 1)", "borderWidth": 1 },
+          { "label": "WorldMirror", "data": [92.48, 91.45, 78.24], "backgroundColor": "rgba(75, 192, 192, 0.5)", "borderColor": "rgba(75, 192, 192, 1)", "borderWidth": 1 },
+          { "label": "WorldMirror (FT)", "data": [92.48, 90.26, 74.95], "backgroundColor": "rgba(75, 192, 192, 1)", "borderColor": "rgba(75, 192, 192, 1)", "borderWidth": 1 },
+          { "label": "π³", "data": [100.00, 95.38, 82.81], "backgroundColor": "rgba(54, 162, 235, 0.5)", "borderColor": "rgba(54, 162, 235, 1)", "borderWidth": 1 },
+          { "label": "π³ (FT)", "data": [100.00, 95.21, 79.81], "backgroundColor": "rgba(54, 162, 235, 1)", "borderColor": "rgba(54, 162, 235, 1)", "borderWidth": 1 }
+        ]
+      }
+    }
+  },
+  "dense_reconstruction": {
+    "title": "Dense Reconstruction",
+    "description": "We report the accuracy (ACC) and completion (CMP) in meters. As shown, our fine-tuned models preserve, and in many cases improve, the reconstruction performance of 3DFMs, despite using only a rotation loss and receiving no supervision on dense outputs.",
+    "leftAxisTitle": "Error (meters)",
+    "combineMetrics": true,
+    "datasets": {
+      "unscenerecon": {
+        "name": "UnSceneRecon",
+        "labels": ["ACC Mean (↓)", "ACC Med. (↓)", "CMP Mean (↓)", "CMP Med. (↓)"],
+        "metrics": [
+          { "label": "VGGT", "data": [1.441, 1.049, 1.403, 0.729], "backgroundColor": "rgba(255, 99, 132, 0.5)", "borderColor": "rgba(255, 99, 132, 1)", "borderWidth": 1 },
+          { "label": "VGGT (FT)", "data": [1.291, 0.908, 1.155, 0.650], "backgroundColor": "rgba(255, 99, 132, 1)", "borderColor": "rgba(255, 99, 132, 1)", "borderWidth": 1 },
+          { "label": "WorldMirror", "data": [0.933, 0.612, 0.702, 0.387], "backgroundColor": "rgba(75, 192, 192, 0.5)", "borderColor": "rgba(75, 192, 192, 1)", "borderWidth": 1 },
+          { "label": "WorldMirror (FT)", "data": [0.972, 0.660, 0.735, 0.368], "backgroundColor": "rgba(75, 192, 192, 1)", "borderColor": "rgba(75, 192, 192, 1)", "borderWidth": 1 },
+          { "label": "π³", "data": [0.716, 0.466, 0.635, 0.377], "backgroundColor": "rgba(54, 162, 235, 0.5)", "borderColor": "rgba(54, 162, 235, 1)", "borderWidth": 1 },
+          { "label": "π³ (FT)", "data": [0.791, 0.517, 0.689, 0.403], "backgroundColor": "rgba(54, 162, 235, 1)", "borderColor": "rgba(54, 162, 235, 1)", "borderWidth": 1 }
+        ]
+      },
+      "eth3d": {
+        "name": "ETH3D",
+        "labels": ["ACC Mean (↓)", "ACC Med. (↓)", "CMP Mean (↓)", "CMP Med. (↓)"],
+        "metrics": [
+          { "label": "VGGT", "data": [0.284, 0.194, 0.342, 0.204], "backgroundColor": "rgba(255, 99, 132, 0.5)", "borderColor": "rgba(255, 99, 132, 1)", "borderWidth": 1 },
+          { "label": "VGGT (FT)", "data": [0.233, 0.144, 0.259, 0.144], "backgroundColor": "rgba(255, 99, 132, 1)", "borderColor": "rgba(255, 99, 132, 1)", "borderWidth": 1 },
+          { "label": "WorldMirror", "data": [0.285, 0.201, 0.301, 0.169], "backgroundColor": "rgba(75, 192, 192, 0.5)", "borderColor": "rgba(75, 192, 192, 1)", "borderWidth": 1 },
+          { "label": "WorldMirror (FT)", "data": [0.235, 0.167, 0.217, 0.126], "backgroundColor": "rgba(75, 192, 192, 1)", "borderColor": "rgba(75, 192, 192, 1)", "borderWidth": 1 },
+          { "label": "π³", "data": [0.187, 0.125, 0.210, 0.129], "backgroundColor": "rgba(54, 162, 235, 0.5)", "borderColor": "rgba(54, 162, 235, 1)", "borderWidth": 1 },
+          { "label": "π³ (FT)", "data": [0.202, 0.137, 0.219, 0.137], "backgroundColor": "rgba(54, 162, 235, 1)", "borderColor": "rgba(54, 162, 235, 1)", "borderWidth": 1 }
+        ]
+      }
+    }
   }
 };
 
@@ -254,6 +320,22 @@ document.addEventListener('DOMContentLoaded', () => {
       descriptionEl.textContent = taskData.description;
     }
 
+    // Handle layout for combined vs split charts
+    const containerMRE = document.getElementById('chart-container-mre');
+    const containerRA = document.getElementById('chart-container-ra');
+    const combineMetrics = taskData.combineMetrics;
+
+    if (combineMetrics) {
+      if (containerMRE) containerMRE.style.display = 'none';
+      if (containerRA) containerRA.style.flex = '1';
+    } else {
+      if (containerMRE) {
+        containerMRE.style.display = 'block';
+        containerMRE.style.flex = '1';
+      }
+      if (containerRA) containerRA.style.flex = '1.8';
+    }
+
     // Render external legend
     const legendContainer = document.getElementById('results-legend');
     if (legendContainer) {
@@ -265,23 +347,37 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
     
-    // Prepare data for MRE (index 0)
-    const mreData = {
-      labels: ["MRE"],
-      datasets: data.metrics.map(dataset => ({
-        ...dataset,
-        data: [dataset.data[0]]
-      }))
-    };
+    let mreData = null;
+    let raData = null;
 
-    // Prepare data for RA (indices 1 and 2)
-    const raData = {
-      labels: ["RA < 15°", "RA < 30°"],
-      datasets: data.metrics.map(dataset => ({
-        ...dataset,
-        data: [dataset.data[1], dataset.data[2]]
-      }))
-    };
+    if (combineMetrics) {
+      // Prepare combined data (all metrics in RA chart)
+      raData = {
+        labels: data.labels,
+        datasets: data.metrics.map(dataset => ({
+          ...dataset,
+          data: dataset.data
+        }))
+      };
+    } else {
+      // Prepare data for MRE (index 0)
+      mreData = {
+        labels: [data.labels[0]],
+        datasets: data.metrics.map(dataset => ({
+          ...dataset,
+          data: [dataset.data[0]]
+        }))
+      };
+
+      // Prepare data for RA (indices 1 and 2)
+      raData = {
+        labels: [data.labels[1], data.labels[2]],
+        datasets: data.metrics.map(dataset => ({
+          ...dataset,
+          data: [dataset.data[1], dataset.data[2]]
+        }))
+      };
+    }
 
     // Common options
     const commonOptions = {
@@ -304,29 +400,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-    chartMRE = new Chart(ctxMRE, {
-      type: 'bar',
-      data: mreData,
-      options: {
-        ...commonOptions,
-        plugins: {
-          ...commonOptions.plugins,
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Median Rotation Error (degrees)'
-            }
+    if (!combineMetrics && mreData) {
+      chartMRE = new Chart(ctxMRE, {
+        type: 'bar',
+        data: mreData,
+        options: {
+          ...commonOptions,
+          plugins: {
+            ...commonOptions.plugins,
           },
-          x: {
-            // Enable ticks to match the RA chart's bottom spacing
-            ticks: { display: true } 
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: taskData.leftAxisTitle || 'Percentage'
+              }
+            },
+            x: {
+              // Enable ticks to match the RA chart's bottom spacing
+              ticks: { display: true } 
+            }
           }
         }
-      }
-    });
+      });
+    }
 
     chartRA = new Chart(ctxRA, {
       type: 'bar',
@@ -340,10 +438,10 @@ document.addEventListener('DOMContentLoaded', () => {
         scales: {
           y: {
             beginAtZero: true,
-            max: 100, 
+            max: (combineMetrics && taskData.yMax !== undefined) ? taskData.yMax : (combineMetrics ? undefined : 100),
             title: {
               display: true,
-              text: 'Percentage'
+              text: combineMetrics ? taskData.leftAxisTitle : 'Percentage'
             }
           }
         }
