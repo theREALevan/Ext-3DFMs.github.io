@@ -380,6 +380,44 @@
 
 <section class="section">
   <div class="container is-max-desktop">
+    <!-- Benchmark. -->
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">The MegaUnScene Benchmark</h2>
+        <div class="content has-text-justified">
+          <p>
+            Existing benchmarks evaluating 3DFMs typically have scenes with constrained 3D environments—<em>e.g.</em>, assuming constant illumination, transient objects, and camera intrinsics. To evaluate 3DFMs on unconstrained inputs captured <em>in-the-wild</em>, we create <em>MegaUnScene</em>&nbsp;: a new collection of 476 Internet scenes <em>unseen</em> by existing models. From these scenes, we assemble two test sets for relative pose estimation and one for dense reconstruction.
+          </p>
+
+          <h3 class="title is-5">Benchmarking Relative Pose in the Wild</h3>
+          <div class="content has-text-justified">
+            <p>
+              We construct two subsets for evaluating relative pose estimation: <em>UnScenePairs</em> targets image pairs with predominant rotational motion, while <em>UnScenePairs-t</em> focuses on pairs with larger camera baselines. Unlike prior benchmarks, these subsets capture unconstrained, in-the-wild views unseen by 3DFMs. In total, they comprise over 6,000 image pairs across more than 450 scenes, including substantial non-overlapping splits.
+            </p>
+          </div>
+
+          <h3 class="title is-5">Benchmarking Dense Predictions in the Wild</h3>
+          <div class="content has-text-justified">
+            <p>
+              We construct <em>UnSceneRecon</em>, a subset comprising 100 in-the-wild reconstructions with metric scale annotations. This benchmark evaluates dense reconstruction quality on unconstrained Internet photos exhibiting diverse lighting conditions, transients, and varying camera models (see figure below).
+            </p>
+          </div>
+          
+          <figure style="margin-top: 1.5rem;">
+            <img src="./static/images/unscenerecon_vis.png" alt="UnSceneRecon Benchmark Visualization" style="width: 100%; height: auto; border-radius: 6px;">
+            <figcaption class="has-text-centered" style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">
+              Metric scale visualization of <em>UnSceneRecon</em> scenes (L→R): Aghavnavank Monastery, Alamgiri Gate, Predjama Castle, and the Ritz Tower. For reference, the person is 2 meters tall.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <!--/ Benchmark. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
     <!-- Results. -->
     <div class="columns is-centered">
       <div class="column is-four-fifths">
@@ -434,7 +472,7 @@
             <span class="icon"><i class="fas fa-expand"></i></span>
           </button>
         </div>
-        <img id="grid-image" src="./static/images/grid.png" alt="Qualitative results over wELP-t" style="width: 100%; height: auto; margin: 0; padding: 0; display: block;">
+        <img id="grid-image" src="./static/images/grid.png" alt="Qualitative results over UnScenePairs-t" style="width: 100%; height: auto; margin: 0; padding: 0; display: block;">
       </div>
     </div>
   </div>
@@ -443,7 +481,7 @@
   <div class="modal" id="grid-fullscreen-modal">
     <div class="modal-background" id="grid-modal-background"></div>
     <div class="modal-content" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative;">
-      <img id="grid-fullscreen-image" src="./static/images/grid.png" alt="Qualitative results over wELP-t" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+      <img id="grid-fullscreen-image" src="./static/images/grid.png" alt="Qualitative results over UnScenePairs-t" style="max-width: 100%; max-height: 100%; object-fit: contain;">
     </div>
   </div>
 </section>
