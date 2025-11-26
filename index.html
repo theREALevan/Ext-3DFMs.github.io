@@ -384,6 +384,32 @@
     <div class="columns is-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3 has-text-centered">Results</h2>
+        
+        <!-- Quantitative Results Section -->
+        <div class="box" style="margin-bottom: 2rem;">
+          <h3 class="title is-5 has-text-centered">Quantitative Results</h3>
+          
+          <div class="tabs is-centered is-boxed" id="results-task-tabs">
+            <!-- Tabs will be injected by JS -->
+          </div>
+          
+          <div id="results-dataset-tabs" class="has-text-centered" style="margin-bottom: 1rem;">
+            <!-- Dataset buttons will be injected by JS -->
+          </div>
+          
+          <div id="results-legend" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; flex-wrap: nowrap; overflow-x: auto;"></div>
+
+          <div style="display: flex; gap: 20px; height: 400px; width: 100%;">
+            <div style="flex: 1; position: relative; min-width: 0;">
+              <canvas id="results-chart-mre"></canvas>
+            </div>
+            <div style="flex: 1.8; position: relative; min-width: 0;">
+              <canvas id="results-chart-ra"></canvas>
+            </div>
+          </div>
+          <p id="results-caption" style="margin-top: 1.5rem; font-size: 0.95rem; text-align: justify;"></p>
+        </div>
+
         <div class="content has-text-justified">
             <p>
               The image below shows two challenging image pairs from the UnScenePairs-t benchmark, where each pair is captured from viewpoints with large rotations and significant camera translation. For each example, the figure presents the input images, followed by a spherical visualization of the predicted relative rotations—<span style="color:black;">black</span> indicates the reference camera, <span style="color:#2563ca;">blue</span> indicates the ground-truth rotation, <span style="color:#ff5250;">red</span> indicates the pre-trained VGGT prediction, and <span style="color:#fbb52a;">yellow</span> indicates the fine-tuned VGGT prediction. On the right, the corresponding 3D reconstructions are shown, including the sparse ground-truth structure and the dense outputs from both the pre-trained and fine-tuned models. Across both cases, the pre-trained model produces distorted geometry due to incorrect relative rotation prediction, while the fine-tuned model yields accurate relative rotation prediction and coherent reconstruction. Please refer to the <a href="./static/supp_vis/viewer.html" style="color: #2563eb; text-decoration: none;">Interactive Visualization</a> for many additional visualizations.
@@ -418,6 +444,7 @@
 
 <script src="./static/histogram/vggt_unscenepairs_t.js"></script>
 <script src="./static/js/histogram.js"></script>
+<script src="./static/js/results.js"></script>
 <script src="./static/js/index.js"></script>
 <script type="module">
   import pairsMetadata from './static/attention_vis/pairs_metadata.js';
