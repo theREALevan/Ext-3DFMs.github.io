@@ -183,7 +183,7 @@
           <div class="is-size-5 publication-authors">
             <span class="author-block"><sup>1</sup>Cornell University</span>
             <span class="author-block"><sup>2</sup>New York University</span>
-            <span class="author-block"><sup>3</sup>Harvard University</span>
+            <span class="author-block"><sup>3</sup>Kempner Institute, Harvard University</span>
           </div>
 
           <div class="column has-text-centered">
@@ -282,7 +282,7 @@
         <div class="content has-text-justified" style="margin-top: 15px;">
           <p>
             <strong>Do 3D foundation models have an emergent understanding of extreme-views?</strong>
-            The <span style="color: #ff4444; font-weight: bold;">pretrained</span> VGGT model was trained primarily on overlapping images.
+            The <span style="color: #ff4444; font-weight: bold;">pre-trained</span> VGGT model was trained primarily on overlapping images.
             Surprisingly, when tested on non-overlapping image pairs, the model still produces plausible estimates of relative pose,
             with nearly half of the pairs yielding a rotation error below 30°.
             Careful fine-tuning of a small number of parameters <span style="color: #ff9800; font-weight: bold;">substantially improves results</span>.
@@ -304,12 +304,8 @@
         <div class="content has-text-justified">
           <p>
             3D foundation models (3DFMs) have recently transformed 3D vision, enabling joint prediction of depths, poses, and point maps directly from images. Yet their ability to reason under extreme, non-overlapping views remains largely unexplored.
-          </p>
-          <p>
             In this work, we study their internal representations and find that 3DFMs exhibit an emergent understanding of extreme-view geometry, despite never being trained for such conditions. To further enhance these capabilities, we introduce a lightweight alignment scheme that refines their internal 3D representation by tuning only a small subset of backbone bias terms, leaving all decoder heads frozen. This targeted adaptation substantially improves relative pose estimation under extreme viewpoints without degrading per-image depth or point quality.
-          </p>
-          <p>
-            Additionally, we contribute <strong>MegaUnScene</strong>, a new benchmark of Internet scenes unseen by existing 3DFMs, with dedicated test splits for both relative pose estimation and dense 3D reconstruction. All code and data will be released.
+            Additionally, we contribute MegaUnScene, a new benchmark of Internet scenes unseen by existing 3DFMs, with dedicated test splits for both relative pose estimation and dense 3D reconstruction. All code and data will be released.
           </p>
         </div>
       </div>
@@ -325,13 +321,16 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3 has-text-centered">Method</h2>
         <div class="content has-text-justified">
-          <p>
-            We analyze how 3DFMs internally represent 3D structure through cross-view attention visualizations, revealing that the shared alternating attention backbone encodes a surprisingly rich understanding of scene geometry. The resulting maps show near-correspondence patterns and symmetry-based cues that persist even when the input images have little or no visual overlap, highlighting that the model's internal <em>3D language</em> extends well beyond direct pixel-level matches.
-          </p>
-          <div class="box interactive-panel" style="margin-bottom: 1rem; padding: 1rem 1.25rem;">
-            <h3 class="title is-5 has-text-centered">Interactive Attention Visualization</h3>
+          <h3 class="title is-5">The Internal Language of 3DFMs</h3>
+          <div class="content has-text-justified">
             <p>
-              The left image shows 28 highlighted 3&times;3 patch regions sampled from image&nbsp;1. Hover over any region to see a white preview box, then click to confirm and view the corresponding attention heatmap on the right, which visualizes where image&nbsp;2's tokens attend when processing that region. The heatmap is overlaid on image&nbsp;2, with warmer colors (red/yellow) indicating higher attention and cooler colors (blue) indicating lower attention. This reveals how the model establishes cross-view correspondences even when images have little or no visual overlap.
+              3D foundation models (3DFMs) have recently shown remarkable progress in reconstructing scene geometry directly from unstructured images. However, despite their growing adoption, their internal structure has remained largely unexplored. In this work, we first analyze their internal <em>3D language</em> via cross-view attention maps, revealing that these models already encode a surprisingly rich understanding of scene geometry within their shared alternating attention backbone. We provide interactive cross-view attention visualizations below:
+            </p>
+          </div>
+          <div class="box interactive-panel" style="margin-bottom: 2rem; padding: 1rem 1.25rem;">
+            <h3 class="title is-5 has-text-centered">Interactive Cross-View Attention Visualization</h3>
+            <p>
+              Hover and select regions in the left image to view its corresponding cross-view attention map on the right. The heatmap is overlaid on the second image, with warmer colors (red/yellow) indicating higher attention. This reveals how the model establishes cross-view correspondences even when images have little or no visual overlap.
             </p>
             <div class="has-text-centered" style="margin: 1rem 0;">
               <div class="buttons has-addons is-centered">
@@ -365,8 +364,9 @@
               Pair 1 of 9 · Large overlap
             </div>
           </div>
+          <h3 class="title is-5">Rotation-Based 3DFM Alignment</h3>
           <p>
-            Building on this insight, we propose a lightweight alignment framework that applies rotation-based supervision only on relative camera poses between image pairs using a geodesic loss, avoiding the need for dense annotations. To prevent disruption of the pre-trained multi-task capabilities, we apply minimal fine-tuning by updating only the bias terms within the sparse set of identified backbone layers, leaving all decoder heads frozen. Even though only around 80 thousand parameters are updated, this targeted approach achieves effective alignment of the model's internal 3D language for extreme-view reasoning without degrading per-image depth or point quality.
+            Building on our findings, we propose a lightweight alignment framework that applies rotation-based supervision only on relative camera poses between image pairs using a geodesic loss. To preserve the model's pre-trained knowledge, we adopt a minimal backbone fine-tuning strategy that targets both the minimal set of layers and parameters within the backbone, updating only around 80k parameters, four orders of magnitude smaller than the full model. This targeted approach achieves effective alignment of the model's internal 3D language for extreme-view reasoning without degrading per-image depth or point quality.
           </p>
           <div class="has-text-centered" style="margin: 0; padding: 0;">
             <img src="./static/images/method.png" alt="3DFM Architectural Design" style="max-width: 100%; height: auto; margin: 0; padding: 0; display: block;">
