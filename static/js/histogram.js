@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
           order: 0,
         },
         {
-          label: 'Pre-trained Error',
+          label: 'Pre-trained Model',
           data: initialSelectedPair ? (() => {
             const xVal = initialSelectedPair.baseError;
             const closest = findClosestOnCurve(baseCurve, xVal);
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
           order: 0,
         },
         {
-          label: 'Fine-tuned Error',
+          label: 'Finetuned Model',
           data: initialSelectedPair ? (() => {
             const xVal = initialSelectedPair.finetunedError;
             const closest = findClosestOnCurve(ftCurve, xVal);
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
           type: 'linear',
           title: {
             display: true,
-            text: 'Rotation error (degrees)',
+            text: 'Rotation Error on Non-Overlapping Pairs (degrees)',
           },
           ticks: {
             maxRotation: 0,
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
           suggestedMax,
           title: {
             display: true,
-            text: 'Fraction of pairs (%)',
+            text: 'Frequency',
           },
         },
       },
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
             generateLabels: (chart) => {
               const original = Chart.defaults.plugins.legend.labels.generateLabels(chart);
               return original.filter(item => {
-                return item.text === 'Pre-trained Error' || item.text === 'Fine-tuned Error';
+                return item.text === 'Pre-trained Model' || item.text === 'Finetuned Model';
               });
             },
           },
