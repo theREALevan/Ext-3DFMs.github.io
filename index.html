@@ -254,17 +254,27 @@
           <div class="histogram-chart-wrapper">
             <canvas id="histogram-chart" aria-label="Histogram of VGGT rotation errors" role="img"></canvas>
             <div class="histogram-floating-images" id="histogram-floating-images">
-              <div class="histogram-image-info" id="histogram-image-info">
-                <div class="histogram-scene-name" id="histogram-scene-name">–</div>
-                <div class="histogram-errors">
-                  <span class="gt-color">GT (yaw/pitch): <span id="histogram-gt-angles">–</span></span>
-                  <span class="base-color">Pre-trained Model (yaw/pitch): <span id="histogram-base-angles">–</span></span>
-                  <span class="ft-color">Finetuned Model (yaw/pitch): <span id="histogram-ft-angles">–</span></span>
-                </div>
-              </div>
+              <div class="histogram-scene-name" id="histogram-scene-name">–</div>
               <div class="histogram-images-row">
                 <img id="histogram-preview-img1" alt="Pair reference image 1" />
                 <img id="histogram-preview-img2" alt="Pair reference image 2" />
+              </div>
+              <div class="histogram-metrics-container">
+                <div class="histogram-metrics-subtitle">Relative Yaw / Pitch</div>
+                <div class="histogram-errors">
+                  <div class="error-metric gt-color">
+                    <span class="metric-label">Ground Truth</span>
+                    <span class="metric-value" id="histogram-gt-angles">–</span>
+                  </div>
+                  <div class="error-metric base-color">
+                    <span class="metric-label">Pre-trained</span>
+                    <span class="metric-value" id="histogram-base-angles">–</span>
+                  </div>
+                  <div class="error-metric ft-color">
+                    <span class="metric-label">Fine-tuned</span>
+                    <span class="metric-value" id="histogram-ft-angles">–</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

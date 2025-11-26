@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ftAnglesEl = document.getElementById('histogram-ft-angles');
     const formatAngles = (yaw, pitch) => {
       if (typeof yaw === 'number' && typeof pitch === 'number' && !Number.isNaN(yaw) && !Number.isNaN(pitch)) {
-        return `${yaw.toFixed(1)}°, ${pitch.toFixed(1)}°`;
+        return `${(-yaw).toFixed(0)}° / ${pitch.toFixed(0)}°`;
       }
       return '–';
     };
