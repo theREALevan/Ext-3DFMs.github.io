@@ -267,11 +267,11 @@
                     <span class="metric-value" id="histogram-gt-angles">–</span>
                   </div>
                   <div class="error-metric base-color">
-                    <span class="metric-label">Pre-trained</span>
+                    <span class="metric-label">Pre-trained Model</span>
                     <span class="metric-value" id="histogram-base-angles">–</span>
                   </div>
                   <div class="error-metric ft-color">
-                    <span class="metric-label">Fine-tuned</span>
+                    <span class="metric-label">Fine-tuned Model</span>
                     <span class="metric-value" id="histogram-ft-angles">–</span>
                   </div>
                 </div>
@@ -285,9 +285,10 @@
             The <span style="color: #ff4444; font-weight: bold;">pre-trained</span> VGGT model was trained primarily on overlapping images.
             Surprisingly, when tested on non-overlapping image pairs, the model still produces plausible estimates of relative pose,
             with nearly half of the pairs yielding a rotation error below 30°.
-            Careful fine-tuning of a small number of parameters <span style="color: #ff9800; font-weight: bold;">substantially improves results</span>.
-            Hover over the interactive canvas above to view random non-overlapping image pairs from our benchmark,
-            along with the rotation errors before and after our lightweight finetuning scheme.
+            Careful fine-tuning of a small number of parameters <span style="color: #ff9800; font-weight: bold;">substantially improves results</span>, as shown above by the error distribution on our new relative pose in-the-wild benchmark (UnScenePairs-t).
+            <br>
+            <em>Hover over the interactive canvas above to view random non-overlapping image pairs from our benchmark,
+            along with the rotation errors before and after our lightweight finetuning scheme.</em>
           </p>
         </div>
       </div>
@@ -330,7 +331,7 @@
           <div class="box interactive-panel" style="margin-bottom: 2rem; padding: 1rem 1.25rem;">
             <h3 class="title is-5 has-text-centered">Interactive Cross-View Attention Visualization</h3>
             <p>
-              Hover and select regions in the left image to view its corresponding cross-view attention map on the right. The heatmap is overlaid on the second image, with warmer colors (red/yellow) indicating higher attention. This reveals how the model establishes cross-view correspondences even when images have little or no visual overlap.
+              Hover and select regions in the left image to view its corresponding cross-view attention map on the right. The heatmap is overlaid on the second image, with warmer colors (red/yellow) indicating higher attention.
             </p>
             <div class="has-text-centered" style="margin: 1rem 0;">
               <div class="buttons has-addons is-centered">
@@ -360,6 +361,13 @@
                 <span class="icon"><i class="fas fa-chevron-right"></i></span>
               </button>
             </div>
+            
+            <div style="margin-top: 0.5rem; min-height: 3.5em; text-align: center;">
+              <p id="attention-description-text" style="font-style: italic; color: #4a4a4a; max-width: 800px; margin: 0 auto;">
+                In cases with no overlap, the model learns to leverage structural similarity (e.g., architectural patterns, repeating details) to guide its 3D understanding, attending to regions that share semantic or geometric resemblance.
+              </p>
+            </div>
+
             <div class="attention-pair-info" id="attention-pair-info">
               Pair 1 of 9 · Large overlap
             </div>
@@ -421,13 +429,13 @@
     <!-- Results. -->
     <div class="columns is-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Results</h2>
+        <h2 class="title is-3 has-text-centered">Experiments</h2>
         
         <!-- Quantitative Results Section -->
         <h3 class="title is-5">Quantitative Results</h3>
         <div class="content has-text-justified">
           <p>
-            We present quantitative evaluations demonstrating the effectiveness of our alignment scheme. As shown below, our method achieves consistent and substantial improvements in extreme-view settings, establishing a new state of the art. Crucially, this targeted adaptation also preserves the 3DFMs' strong pre-trained multi-task capabilities like multiview pose estimation and dense reconstruction prediction.
+            We present quantitative evaluations demonstrating the effectiveness of our alignment scheme. As shown below, our method achieves consistent and substantial improvements in extreme-view settings, establishing a new state of the art. Crucially, this targeted adaptation also preserves the 3DFMs' strong pre-trained multi-task capabilities over tasks such as multiview pose estimation and dense reconstruction prediction.
           </p>
         </div>
         <div class="box" style="margin-bottom: 2rem;">
@@ -456,7 +464,7 @@
         <h3 class="title is-5">Qualitative Results</h3>
         <div class="content has-text-justified">
             <p>
-              The image below shows two challenging image pairs from the UnScenePairs-t benchmark, where each pair is captured from viewpoints with large rotations and significant camera translation. For each example, the figure presents the input images, followed by a spherical visualization of the predicted relative rotations—<span style="color:black;">black</span> indicates the reference camera, <span style="color:#2563ca;">blue</span> indicates the ground-truth rotation, <span style="color:#ff5250;">red</span> indicates the pre-trained VGGT prediction, and <span style="color:#fbb52a;">yellow</span> indicates the fine-tuned VGGT prediction. On the right, the corresponding 3D reconstructions are shown, including the sparse ground-truth structure and the dense outputs from both the pre-trained and fine-tuned models. Across both cases, the pre-trained model produces distorted geometry due to incorrect relative rotation prediction, while the fine-tuned model yields accurate relative rotation prediction and coherent reconstruction. Please refer to the <a href="./static/supp_vis/viewer.html" style="color: #2563eb; text-decoration: none;">Interactive Visualization</a> for many additional visualizations.
+              Below we illustrate two challenging image pairs from the UnScenePairs-t benchmark, where each pair is captured from viewpoints with large rotations and significant camera translation. For each example, the figure presents the input images, followed by a spherical visualization of the predicted relative rotations—<span style="color:black;">black</span> indicates the reference camera, <span style="color:#2563ca;">blue</span> indicates the ground-truth rotation, <span style="color:#ff5250;">red</span> indicates the pre-trained VGGT prediction, and <span style="color:#fbb52a;">yellow</span> indicates the fine-tuned VGGT prediction. On the right, the corresponding 3D reconstructions are shown, including the sparse ground-truth structure and the dense outputs from both the pre-trained and fine-tuned models. Across both cases, the pre-trained model produces distorted geometry due to incorrect relative rotation prediction, while the fine-tuned model yields accurate relative rotation prediction and coherent reconstruction. Please refer to our <a href="./static/supp_vis/viewer.html" style="color: #2563eb; text-decoration: none;">Interactive Visualization</a> for results of all models on the sELP, UnScenePairs and UnScenePairs-t test sets.
             </p>
             
         </div>
@@ -515,6 +523,13 @@
     'none': 'No overlap'
   };
 
+  // Descriptions for each overlap type
+  const overlapDescriptions = {
+    'large': 'For regions with direct visual overlap, the high attention areas accumulate precisely at the corresponding locations. This demonstrates the model\'s ability to identify exact visual correspondences.',
+    'small': 'For regions without direct visual overlap, the cross-view maps reveal non-trivial structural patterns. The model often attends to "near-corresponding" areas—image regions spatially closest to the query points in the 3D world.',
+    'none': 'In cases with no overlap, the model learns to leverage structural similarity (e.g., architectural patterns, repeating details) to guide its 3D understanding, attending to regions that share semantic or geometric resemblance.'
+  };
+
   function filterPairs(overlap) {
     currentFilter = overlap;
     filteredMetadata = pairsMetadata.filter(pair => pair.overlap === overlap);
@@ -523,6 +538,12 @@
     document.querySelectorAll('.overlap-filter').forEach(btn => {
       btn.classList.toggle('is-active', btn.dataset.overlap === overlap);
     });
+
+    // Update description text
+    const descriptionEl = document.getElementById('attention-description-text');
+    if (descriptionEl && overlapDescriptions[overlap]) {
+      descriptionEl.textContent = overlapDescriptions[overlap];
+    }
     
     // Reset to first pair in filtered list
     currentPairIndex = 0;

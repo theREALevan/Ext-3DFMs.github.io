@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
           suggestedMax,
           title: {
             display: true,
-            text: 'Frequency',
+            text: 'Frequency (%)',
           },
         },
       },

@@ -1,7 +1,7 @@
 const RESULTS_DATA = {
-  "relative_rotation": {
+    "relative_rotation": {
     "title": "Extreme Relative Rotation",
-    "description": "We report the median rotation error (MRE) and relative rotation accuracy (RA) at thresholds of 15° and 30°. As shown, our fine-tuned models (VGGT, WorldMirror, and π³) achieve consistent and substantial improvements across all test sets, establishing a new state of the art in extreme rotation estimation, outperforming the previous SOTA ExRot.",
+    "description": "We report the median rotation error (MRE) and relative rotation accuracy (RA) at thresholds of 15° and 30° over non-overlapping image pairs. As shown, our fine-tuned models (VGGT, WorldMirror, and π³) achieve consistent and substantial improvements across all test sets, establishing a new state of the art in extreme rotation estimation, outperforming the previous SOTA ExRot.",
     "leftAxisTitle": "Median Rotation Error (degrees)",
     "datasets": {
       "cambridge": {    
