@@ -525,8 +525,8 @@
 
   // Descriptions for each overlap type
   const overlapDescriptions = {
-    'large': 'For regions with direct visual overlap, the high attention areas accumulate precisely at the corresponding locations. This demonstrates the model\'s ability to identify exact visual correspondences.',
-    'small': 'For regions without direct visual overlap, the cross-view maps reveal non-trivial structural patterns. The model often attends to "near-corresponding" areas—image regions spatially closest to the query points in the 3D world.',
+    'large': 'For regions with direct visual overlap, the high attention areas accumulate precisely at the corresponding locations, demonstrating the model\'s ability to identify visual correspondences.',
+    'small': 'For regions without direct visual overlap, the cross-view maps often attend to "near-corresponding" areas—image regions spatially closest to the query points in the 3D world.',
     'none': 'In cases with no overlap, the model learns to leverage structural similarity (e.g., architectural patterns, repeating details) to guide its 3D understanding, attending to regions that share semantic or geometric resemblance.'
   };
 
