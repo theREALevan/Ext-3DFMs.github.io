@@ -279,9 +279,17 @@
             </div>
           </div>
         </div>
-        <p class="has-text-centered">
-          <em>Given a pair of images with little or no visual overlaps, extreme relative rotation estimation predicts the relative rotation between them, where relative rotation error measures the angular distance between predicted and ground-truth relative rotation matrices. The interactive canvas above shows the distribution of pre-trained and fine-tuned VGGT relative rotation errors on non-overlapping UnScenePairs-t image pairs.</em>
-        </p>
+        <div class="content has-text-justified" style="margin-top: 15px;">
+          <p>
+            <strong>Do 3D foundation models have an emergent understanding of extreme-views?</strong>
+            The <span style="color: #ff4444; font-weight: bold;">pretrained</span> VGGT model was trained primarily on overlapping images.
+            Surprisingly, when tested on non-overlapping image pairs, the model still produces plausible estimates of relative pose,
+            with nearly half of the pairs yielding a rotation error below 30°.
+            Careful fine-tuning of a small number of parameters <span style="color: #ff9800; font-weight: bold;">substantially improves results</span>.
+            Hover over the interactive canvas above to view random non-overlapping image pairs from our benchmark,
+            along with the rotation errors before and after our lightweight finetuning scheme.
+          </p>
+        </div>
       </div>
     </div>
   </div>
